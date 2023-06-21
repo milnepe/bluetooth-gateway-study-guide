@@ -1,0 +1,113 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+	<script language="javascript" type="text/javascript" src="js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.canvaswrapper.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.colorhelpers.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.saturated.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.browser.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.drawSeries.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.flot.uiConstants.js"></script>
+    <script language="javascript" type="text/javascript" src="js/jquery.flot.time.js"></script>
+    <script language="javascript" type="text/javascript" src="js/constants.js"></script>
+    <script language="javascript" type="text/javascript" src="js/utils.js"></script>
+    <script language="javascript" type="text/javascript" src="js/gateway.js"></script>
+</head>
+
+<body onload="init_page();">
+
+    <div id="message" class="centre important"></div>
+
+    <div id="network_controller" class="centre">
+        
+        <p>Bluetooth Mesh Network Control</p>
+
+        <table border="1" class="centre">
+            <tr>
+                <td colspan="1" class="centre">Destination Address:</td>
+                <td colspan="1" class="centre">
+                    <select name="dst_addresses" id="dst_addresses">
+                      </select>
+                </td>
+                <td colspan="1" id="selected_dst" class="centre"></td>
+            </tr>
+        </table>
+
+        <table border="1" class="centre top_margin">
+
+            <tr><td class="centre">Camera</td><td class="centre">Light Switch</td><td class="centre">Colour Selection</td></tr>
+            
+            <tr>
+
+                <td>
+                    <div class="webcam" id="webcam"></div>
+                    <div class="centre">
+                        <input type="checkbox" id="webcam_switch" name="webcam_switch">
+                        <label for="webcam_switch">Enable Webcam</label>
+                      </div>
+                </td>
+
+                <td>
+                    <div class="button-grid">
+                        <div><button id="btn_on" class="on_button"
+                            onclick="onOn();" >Switch On</button></div>
+                        <div><button id="btn_off" class="off_button"
+                            onclick="onOff();" >Switch Off</button></div>
+                    </div>
+                </td>
+                <td>
+                    <table class="no_border">
+                        <tr>
+                            <td class="full_width" colspan="4">
+                                <div class="colour_grid" id="colour_grid">
+                                    <div class="white_square" id="colour_0"></div>
+                                    <div class="red_square" id="colour_1"></div>
+                                    <div class="green_square" id="colour_2"></div>
+                                    <div class="blue_square" id="colour_3"></div>
+                                    <div class="yellow_square" id="colour_4"></div>
+                                    <div class="cyan_square" id="colour_5"></div>
+                                    <div class="magenta_square" id="colour_6"></div>
+                                    <div class="black_square" id="colour_7"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+        <hr></hr>
+
+        <table border="1" class="centre">
+            <tr>
+                <td colspan="1" class="centre">Indoor Temperature</td>
+                <td colspan="1" class="centre">
+                    <input type="checkbox" id="sub_indoor_temp" name="sub_indoor_temp" />
+                </td>
+                <td colspan="1" class="centre">Outdoor Temperature</td>
+                <td colspan="1" class="centre">
+                    <input type="checkbox" id="sub_outdoor_temp" name="sub_outdoor_temp" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="centre indoor_temperature" id="indoor_temperature"></td>
+                <td colspan="2" class="centre outdoor_temperature" id="outdoor_temperature"></td>
+            </tr>
+        </table>
+
+        <table class="centre">
+            <tr>
+              <td class="top_aligned">
+                 <div id="chart_area" class="chart_area"></div>                  
+              </td>
+            </tr>
+        </table>
+   
+    
+    </div>
+
+
+</body>
+
+</html>

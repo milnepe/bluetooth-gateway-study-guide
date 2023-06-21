@@ -1,0 +1,235 @@
+body {
+  height: 100%;
+  min-height: 100%;
+  font-size: 125%;
+  font-family: "Courier New", "Times New Roman", Georgia, Serif;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+h1 {
+  font-size: 5.4vw;
+  color: #0082FC;
+  margin-left: 5px;
+}
+
+h2 {
+  font-size: 3.0vw;
+  color: #0082FC;
+  margin-left: 5px;
+}
+
+h3 {
+  font-size: 2.5vw;
+  color: #0082FC;
+  margin-left: 20px;
+}
+
+h4 {
+  font-size: 2.0vw;
+  color: #0082FC;
+  margin-left: 20px;
+  margin-bottom: 0px;
+}
+
+h5 {
+  font-size: 2.0vw;
+  color: #0082FC;
+  margin-left: 20px;
+  margin-bottom: 5px;
+}
+
+p {
+  margin-left: 20px;
+}
+
+img {
+  margin-left: 20px;
+}
+
+a {
+ cursor: pointer;
+ color: #0082FC;
+}
+
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+
+/* tr:nth-child(even) {background-color: #d3d3d3;} */
+
+.important {
+  color: #FF0000;
+  font-size: 80%;
+}
+
+.button {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  margin-bottom: 20px;
+  margin-right: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  background: #0082FC;
+  color: #ffffff;
+  cursor:pointer;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.characteristic_button {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  margin-right: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  background: #0082FC;
+  color: #ffffff;
+  cursor:pointer;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.characteristic_button_off {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  margin-right: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  background: #0082FC;
+  color: #ff0000;
+  cursor:pointer;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.format_button_enabled {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  margin-right: 10px;
+  font-size: 8px;
+  background: #0082FC;
+  color: #ffffff;
+  cursor:pointer;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.format_button_disabled {
+  border: none;
+  outline: none;
+  border-radius: 0;
+  margin-right: 10px;
+  font-size: 8px;
+  background: #C0C0C0;
+  color: #ffffff;
+  cursor:pointer;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  -webkit-appearance: none;
+}
+
+.button-list {
+  border: 0;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.item-list {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+.device-control {
+  border: 1px solid white;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+.gatt_service {
+ color: #ffffff;
+}
+
+.gatt_characteristic {
+ color: #00ffff;
+}
+
+.gatt_descriptor {
+ color: #0082FC;
+}
+
+.webcam {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  text-align: center
+}
+
+.readonly {
+  background: #C0C0C0;
+}
+
+/* modal pop-up form - see https://www.w3schools.com/howto/howto_css_modals.asp*/
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 300px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  color: #000000;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.modal-field {
+  padding-bottom: 10px;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+

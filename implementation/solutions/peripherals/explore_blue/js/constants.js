@@ -1,0 +1,31 @@
+let NOTIFICATIONS_SERVER = 'ws://raspberrypi:8082/';
+// secure version of the notifications server (i.e. web socket daemon) URL:
+// let NOTIFICATIONS_SERVER = 'wss://raspberrypi:443/ws/';
+
+
+let CGI_ROOT = "../cgi-bin/gateway/";
+
+let view_mode = 1;
+let HTML_MODE = 1;
+let JSON_MODE = 2;
+let FORMAT_HEX = 0;
+let FORMAT_NLE = 1;
+let FORMAT_NBE = 2;
+let FORMAT_STR = 3;
+let FORMAT_UINT16LE = 4;
+let FORMAT_UINT16BE = 5;
+
+let NOTIFICATIONS_ON = 1;
+let NOTIFICATIONS_OFF = 0;
+
+let error = ['OK', 'GENERAL ERROR' , 'ERROR - NOT CONNECTED' , 'ERROR - NOT SUPPORTED' , 'ERROR - SERVICES NOT RESOLVED' , 'ERROR - WRONG STATE' , 'ERROR - ACCESS DENIED' , 'ERROR - SYSTEM ERROR'];
+let RESULT_OK = 0
+let RESULT_ERR = 1
+let RESULT_ERR_NOT_CONNECTED = 2
+let RESULT_ERR_NOT_SUPPORTED = 3
+let RESULT_ERR_SERVICES_NOT_RESOLVED = 4	
+let RESULT_ERR_WRONG_STATE = 5
+let RESULT_ERR_ACCESS_DENIED = 6
+let RESULT_EXCEPTION = 7
+let RESULT_ERR_BAD_ARGS = 8
+let RESULT_ERR_NOT_FOUND = 9

@@ -1,0 +1,10 @@
+{
+	"comment": "Addresses must in in upper case for matching to work in bluetooth_firewall.py",
+
+	"enabled": true,
+
+	"i2mn_address_acceptlist": [ "C001", "C011", "C012", "C013", "C014", "C021", "C022", "C023", "C024"],
+
+	"mn2i_address_acceptlist": [ "C002", "C003"]
+
+}

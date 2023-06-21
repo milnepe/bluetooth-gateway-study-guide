@@ -1,0 +1,123 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="js/constants.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/gateway.js"></script>
+    <script src="js/uuids.js"></script>
+    <script src="js/jquery-3.5.0.min.js"></script>
+    <script src="js/jquery.flot.js"></script>
+</head>
+
+<body onload="init_devices_page();">
+
+    <div id="message" class="important">ready</div>
+
+    <div id="device_list" >
+        <h2>Find micro:bit</h2>
+        <table>
+            <tr>
+                <td><button id="btn_devices_html" class="button" onclick="onDevicesHtmlSelected();" >Scan</button></td>
+            </tr>
+        </table>
+        <table id="tbl_devices" class="item-list">
+        </table>
+    </div>
+
+    <div id="device_controller" hidden>
+        
+        <h2>Micro:bit Remote Control</h2>
+        <table>
+            <tr>
+                <td class="button-list"><button id="btn_back1" class="button" onclick="onDeviceList();" >Back</button>
+                </td>
+                <td><button id="btn_toggle" class="button" onclick="toggleConnectionState();" >Connect</button></td>
+            </tr>
+        </table>
+
+        <table border="1">
+            <tr><td>Camera</td><td>LED Control</td><td>On / Off</td></tr>
+            
+            <tr>
+                <td>
+                    <div class="webcam"><img src="http://raspberrypi:8081?action=stream" alt="webcam"/></div>
+                </td>
+                <td>
+                    <table class="no_border">
+                        <tr>
+                            <td class="half_width top_aligned">
+                                <div class="whole-grid" id="whole-grid">
+                                    <div class="panel" id="panel">
+                                        <div class="node" id="LED_0_4" onclick="onCellSelected(0,4);"></div>
+                                        <div class="node" id="LED_0_3" onclick="onCellSelected(0,3);"></div>
+                                        <div class="node" id="LED_0_2" onclick="onCellSelected(0,2);"></div>
+                                        <div class="node" id="LED_0_1" onclick="onCellSelected(0,1);"></div>
+                                        <div class="node" id="LED_0_0" onclick="onCellSelected(0,0);"></div>
+                                        <div class="node" id="LED_1_4" onclick="onCellSelected(1,4);"></div>
+                                        <div class="node" id="LED_1_3" onclick="onCellSelected(1,3);"></div>
+                                        <div class="node" id="LED_1_2" onclick="onCellSelected(1,2);"></div>
+                                        <div class="node" id="LED_1_1" onclick="onCellSelected(1,1);"></div>
+                                        <div class="node" id="LED_1_0" onclick="onCellSelected(1,0);"></div>
+                                        <div class="node" id="LED_2_4" onclick="onCellSelected(2,4);"></div>
+                                        <div class="node" id="LED_2_3" onclick="onCellSelected(2,3);"></div>
+                                        <div class="node" id="LED_2_2" onclick="onCellSelected(2,2);"></div>
+                                        <div class="node" id="LED_2_1" onclick="onCellSelected(2,1);"></div>
+                                        <div class="node" id="LED_2_0" onclick="onCellSelected(2,0);"></div>
+                                        <div class="node" id="LED_3_4" onclick="onCellSelected(3,4);"></div>
+                                        <div class="node" id="LED_3_3" onclick="onCellSelected(3,3);"></div>
+                                        <div class="node" id="LED_3_2" onclick="onCellSelected(3,2);"></div>
+                                        <div class="node" id="LED_3_1" onclick="onCellSelected(3,1);"></div>
+                                        <div class="node" id="LED_3_0" onclick="onCellSelected(3,0);"></div>
+                                        <div class="node" id="LED_4_4" onclick="onCellSelected(4,4);"></div>
+                                        <div class="node" id="LED_4_3" onclick="onCellSelected(4,3);"></div>
+                                        <div class="node" id="LED_4_2" onclick="onCellSelected(4,2);"></div>
+                                        <div class="node" id="LED_4_1" onclick="onCellSelected(4,1);"></div>
+                                        <div class="node" id="LED_4_0" onclick="onCellSelected(4,0);"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table>
+                                    <tr>
+                                        <td><input type="text" id="led_text" value="" size="27"/></td>
+                                        <td><button id="btn_led_text" class="simple_button"
+                                                onclick="onLedText();" >Send</button></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <div class="button-grid">
+                        <div><button id="btn_on" class="on_button"
+                            onclick="onOn();" >Switch On</button></div>
+                        <div><button id="btn_off" class="off_button"
+                            onclick="onOff();" >Switch Off</button></div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <p>Temperature Monitoring</p>
+        <table>
+            <tr><td><div  id="current_temperature" class="current_temperature">--</div></td></tr>
+            <tr>
+              <td class="top_aligned">
+                 <div id="chart_area" class="chart_area"></div>                  
+              </td>
+            </tr>
+            <tr>
+                <td><button id="btn_toggle_chart" class="simple_button" onclick="onToggleChart();" >Chart On</button></td>
+            </tr>
+        </table>
+   
+    
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+<html>
+<head>
+	 <link rel="stylesheet" type="text/css" href="css/style.css" />
+     <script src="js/constants.js"></script>
+     <script src="js/utils.js"></script>
+     <script src="js/gateway.js"></script>
+     <script src="js/uuids.js"></script>
+</head>
+<body onload="init_devices_page();">
+
+<div id="message" class="important">ready</div>
+
+<div id="device_list" hidden="false">
+    <h2>Bluetooth Devices</h2>
+    <table>
+        <tr>
+            <td><button id="btn_devices_html" class="button" onclick="onDevicesHtmlSelected();" />Scan - HTML</button></td>
+            <td><button id="btn_devices_json" class="button" onclick="onDevicesJsonSelected();"/>Scan - JSON</button></td></tr></table>
+    <pre id="json_content"></pre>
+    <table id="tbl_devices" class="item-list">
+    </table>     
+</div>
+
+<div id="device_controller" hidden="true">
+
+    <h2>Bluetooth Device Control</h2>
+    <button id="btn_back1" class="button" onclick="onDeviceList();" />Back</button>
+    <button id="btn_camera" class="button" onclick="onCamera();" />Camera</button>
+    
+    <table class="device-control">
+        <tr>
+            <td><b>Address</b></td><td id="device_addr"></td>
+        </tr>
+        <tr>
+            <td><b>Name</b></td><td id="name"></td>
+        </tr>
+        <tr>
+            <td><b>Connected</b></td><td id="connected"></td>
+        </tr>
+        <tr>
+            <td><b>Paired</b></td><td id="paired"></td>
+        </tr>
+        <tr>
+            <td><b>RSSI</b></td><td id="rssi"></td>
+        </tr>
+        <tr>
+            <td><b>Appearance</b></td><td id="appearance"></td>
+        </tr>
+        <tr>
+            <td><b>Advertising Data</b></td><td id="ad"></td>
+        </tr>
+        <tr>
+            <td><b>Services Resolved</b></td><td id="services_resolved"></td>
+        </tr>
+        <tr>
+            <td><button id="btn_toggle" class="button" onclick="toggleConnectionState(selected_device_inx);"/>Connect</button></td>
+            <td><button id="btn_svc_discovery" class="button" onclick="onServiceDiscovery();" hidden="true"/>Discover Services</button></td>
+        </tr>
+    </table>
+    <table id="tbl_services" class="item-list">
+        <tr><td></td><td><b>UUID</b></td><td><b>Name</b></td><td><b>Properties</b></td><td><b>Value</b></td></tr>
+        
+    </table>
+
+</div>
+
+<div id="write_form" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span id="close_form" class="close">&times;</span>
+    <div class="modal-field"><b>WRITE</b></div>
+    <div class="modal-field" id="write_uuid"></div>
+    <div class="modal-field" id="write_name"></div>
+    <div class="modal-field"><input id="write_value" type="text"/></div>
+    <div class="modal-field">
+        <select id="write_formats">
+            <option value="0">Hex Bytes</option>
+            <option value="4">UINT16 LE</option>
+            <option value="5">UINT16 BE</option>
+            <option value="3">TEXT</option>
+        </select>
+    </div>
+    <div"><button id="btn_submit" class="button" onclick="onSubmitWrite();"/>Submit</button></div>
+  </div>
+
+</div>
+     
+</body>
+</html>
