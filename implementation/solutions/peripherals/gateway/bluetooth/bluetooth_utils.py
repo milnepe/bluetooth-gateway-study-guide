@@ -5,16 +5,19 @@ from sys import stdin, stdout
 
 fo = open("log.txt", "a")
 
+
 def log(line):
     fo.write(line)
     fo.flush()
-    
+
+
 def byteArrayToHexString(bytes):
     hex_string = ""
     for byte in bytes:
         hex_byte = '%02X' % byte
         hex_string = hex_string + hex_byte
     return hex_string
+
 
 def dbus_to_python(data):
     if isinstance(data, dbus.String):
