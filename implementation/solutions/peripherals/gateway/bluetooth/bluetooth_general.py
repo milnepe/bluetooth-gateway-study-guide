@@ -6,19 +6,19 @@ import dbus
 adapter_interface = None
 mainloop = None
 
+# To do: Fix missing manager!
+# def get_adapters():
+#     # get all objects in the bluez service
+#     manager_obj = manager.GetManagedObjects()
+#     # iterate through them
+#     for path, ifaces in manager_obj.items():
+#         # if the org.bluez.Adapter1 interface is supported by this object, store its address and path
+#         if bluetooth_constants.ADAPTER_INTERFACE in ifaces:
+#             adapter_paths.append(path)
+#             adapter_addresses.append(
+#                 manager_obj[path][bluetooth_constants.ADAPTER_INTERFACE]['Address'])
 
-def get_adapters():
-    # get all objects in the bluez service
-    manager_obj = manager.GetManagedObjects()
-    # iterate through them
-    for path, ifaces in manager_obj.items():
-        # if the org.bluez.Adapter1 interface is supported by this object, store its address and path
-        if bluetooth_constants.ADAPTER_INTERFACE in ifaces:
-            adapter_paths.append(path)
-            adapter_addresses.append(
-                manager_obj[path][bluetooth_constants.ADAPTER_INTERFACE]['Address'])
-
-    return (adapter_paths, adapter_addresses)
+#     return (adapter_paths, adapter_addresses)
 
 
 def getDeviceProxy(bus, bdaddr):
