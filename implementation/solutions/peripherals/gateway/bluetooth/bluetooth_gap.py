@@ -22,14 +22,10 @@ devices = {}
 
 
 def interfaces_added(path, interfaces):
-    logging.info("Adding interfaces: %s", path)
     if bluetooth_constants.DEVICE_INTERFACE not in interfaces:
         return
     properties = interfaces[bluetooth_constants.DEVICE_INTERFACE]
-    if path in devices:
-        dev = devices[path]
-        devices[path] = dict(devices[path].items() + properties.items())
-    else:
+    if path not in devices:
         devices[path] = properties
     if "Address" in devices[path]:
         address = properties["Address"]
