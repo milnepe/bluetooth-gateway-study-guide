@@ -27,7 +27,20 @@ class CmdConnectDevice(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.connect_device, args=(self.bdaddr,))  # args is a tuple - Don't forget the ','!
+            thread = Thread(target=self.bt_controller.connect_device, args=(self.bdaddr,))
             thread.start()
-            # wait for the thread to finish
+            thread.join()
+
+
+class CmdWriteCharacteristic(Command):
+    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, value: str):
+        self.bt_controller = bt_controller
+        self.bdaddr = bdaddr
+        self.handle = handle
+        self.value = value
+
+    def execute(self) -> None:
+        if self.bt_controller is not None:
+            thread = Thread(target=self.bt_controller.write_characteristic, args=(self.bdaddr, self.handle, self.value))
+            thread.start()
             thread.join()
