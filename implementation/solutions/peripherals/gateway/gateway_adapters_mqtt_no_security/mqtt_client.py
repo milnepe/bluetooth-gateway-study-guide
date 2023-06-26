@@ -1,8 +1,11 @@
 #!/usr/bin/python
 """
-MQTT client for discovering BLE devices
+MQTT client for discovering BLE devices & connecting
 
-$ mosquitto_pub -h rock-4se -t "test/gateway/discover_devices" -m '{"scantime": "3000"}'
+Discover devices that are advertising:
+$ mosquitto_pub -h rock-4se -t "test/gateway/discover_devices" -m '{"scantime":"3000"}'
+Connect to a discovered device using its address:
+$ mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
 """
 
 import paho.mqtt.client as mqtt
@@ -11,6 +14,7 @@ import json
 import sys
 
 from commands import CmdDiscoverDevices
+from commands import CmdConnectDevice
 from bt_controller import BtController
 from invoker import Invoker
 
@@ -38,6 +42,13 @@ def on_discover_devices(mosq, obj, msg):
     logging.info("Discover devices: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
+def on_connect_device(mosq, obj, msg):
+    """Callback mapping TOPIC_ROOT + "/gateway/connect_device" topic to CmdConnectDevice"""
+    payload = json.loads(msg.payload)
+    invoker.set_command(CmdConnectDevice(bt_controller, payload['bdaddr']))
+    logging.info("Connect device: %s, %s", msg.topic, msg.payload.decode('utf-8'))
+
+
 def on_message(mosq, obj, msg):
     """Callback mapping all other TOPIC_ROOT messages - no ops"""
     logging.info("Unexpected message: %s, %s", msg.topic, msg.payload.decode('utf-8'))
@@ -48,6 +59,7 @@ def main() -> None:
     mqttc = mqtt.Client()
 
     mqttc.message_callback_add(TOPIC_ROOT + "/gateway/discover_devices", on_discover_devices)
+    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/connect_device", on_connect_device)
 
     mqttc.on_message = on_message
     mqttc.connect(BROKER, 1883, 60)
