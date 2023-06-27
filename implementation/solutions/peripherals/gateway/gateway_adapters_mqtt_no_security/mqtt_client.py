@@ -43,7 +43,7 @@ from commands import CmdReadCharacteristic
 from bt_controller import BtController
 from invoker import Invoker
 
-BROKER = '192.168.1.181'
+BROKER = 'rock-4se'
 TOPIC_ROOT = "test"
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)

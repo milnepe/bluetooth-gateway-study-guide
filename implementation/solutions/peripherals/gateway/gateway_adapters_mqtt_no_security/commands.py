@@ -68,4 +68,4 @@ class CmdReadCharacteristic(Command):
         if self.bt_controller is not None:
             thread = Thread(target=self.bt_controller.read_characteristic, args=(self.bdaddr, self.handle))
             thread.start()
-            thread.join()
+            #thread.join()
