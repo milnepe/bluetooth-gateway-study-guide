@@ -44,3 +44,15 @@ class CmdWriteCharacteristic(Command):
             thread = Thread(target=self.bt_controller.write_characteristic, args=(self.bdaddr, self.handle, self.value))
             thread.start()
             thread.join()
+
+
+class CmdDiscoverServices(Command):
+    def __init__(self, bt_controller: BtController, bdaddr: str):
+        self.bt_controller = bt_controller
+        self.bdaddr = bdaddr
+
+    def execute(self) -> None:
+        if self.bt_controller is not None:
+            thread = Thread(target=self.bt_controller.discover_services, args=(self.bdaddr,))
+            thread.start()
+            thread.join()

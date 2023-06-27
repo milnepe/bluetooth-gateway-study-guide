@@ -3,34 +3,40 @@
 MQTT client for discovering BLE devices & connecting
 
 Discover devices that are advertising:
-$ mosquitto_pub -h rock-4se -t "test/gateway/discover_devices" -m '{"scantime":"3000"}'
+mosquitto_pub -h rock-4se -t "test/gateway/discover_devices" -m '{"scantime":"3000"}'
 
 Connect to a discovered device using its address:
-$ mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
+mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
+mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
+mosquitto_pub -h rock-4se -t "test/gateway/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+
+Discover connected device services
+mosquitto_pub -h rock-4se -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
+mosquitto_pub -h rock-4se -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
+mosquitto_pub -h rock-4se -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
+mosquitto_pub -h rock-4se -t "test/gateway/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
 
 Write to characteristic
-$ mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0048", "value":"01"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0048", "value":"01"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0048", "value":"01"}'
-$ mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
+mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0048", "value":"01"}'
+mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0048", "value":"01"}'
+mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0048", "value":"01"}'
+mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
 
 """
 
 import paho.mqtt.client as mqtt
 import logging
 import json
-import sys
 
 from commands import CmdDiscoverDevices
 from commands import CmdConnectDevice
 from commands import CmdWriteCharacteristic
+from commands import CmdDiscoverServices
 from bt_controller import BtController
 from invoker import Invoker
 
-BROKER = 'rock-4se'
+BROKER = '192.168.1.181'
 TOPIC_ROOT = "test"
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -68,6 +74,13 @@ def on_write_characteristic(mosq, obj, msg):
     logging.info("Write Characteristic: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
+def on_discover_services(mosq, obj, msg):
+    """Callback mapping TOPIC_ROOT + "/gateway/discover_services" topic to CmdDiscoverServices"""
+    payload = json.loads(msg.payload)
+    invoker.set_command(CmdDiscoverServices(bt_controller, payload['bdaddr']))
+    logging.info("Discover Services: %s, %s", msg.topic, msg.payload.decode('utf-8'))
+
+
 def on_message(mosq, obj, msg):
     """Callback mapping all other TOPIC_ROOT messages - no ops"""
     logging.info("Unexpected message: %s, %s", msg.topic, msg.payload.decode('utf-8'))
@@ -80,12 +93,15 @@ def main() -> None:
     mqttc.message_callback_add(TOPIC_ROOT + "/gateway/discover_devices", on_discover_devices)
     mqttc.message_callback_add(TOPIC_ROOT + "/gateway/connect_device", on_connect_device)
     mqttc.message_callback_add(TOPIC_ROOT + "/gateway/write_characteristic", on_write_characteristic)
+    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/discover_services", on_discover_services)
 
     mqttc.on_message = on_message
     mqttc.connect(BROKER, 1883, 60)
     mqttc.subscribe(TOPIC_ROOT + "/#", 0)
 
     mqttc.loop_start()
+
+    logging.info("Client listening...")
 
     while True:
         invoker.invoke()
