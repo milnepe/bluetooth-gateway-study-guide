@@ -6,6 +6,7 @@ sys.path.insert(0, '..')  # Aid location of bluetooth package
 from bluetooth import bluetooth_gap
 from bluetooth import bluetooth_gatt
 from bluetooth import bluetooth_exceptions
+from bluetooth import bluetooth_utils
 
 
 class BtController:
@@ -61,3 +62,16 @@ class BtController:
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
         logging.info("Discover services: %s", result)
+
+    def read_characteristic(self, bdaddr: str, handle: str) -> None:
+        """Read a characteristic using device address and handle"""
+        result = {}
+        result['bdaddr'] = bdaddr
+        result['handle'] = handle
+        try:
+            value = bluetooth_gatt.read_characteristic(bdaddr, handle)
+            result['value'] = bluetooth_utils.byteArrayToHexString(value)
+            result['result'] = 0
+        except bluetooth_exceptions.StateError as e:
+            result['result'] = e.args[0]
+        logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
