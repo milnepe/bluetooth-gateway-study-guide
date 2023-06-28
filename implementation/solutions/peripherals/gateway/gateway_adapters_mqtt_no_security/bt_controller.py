@@ -1,6 +1,7 @@
 import logging
 import sys
 import json
+import dbus
 
 sys.path.insert(0, '..')  # Aid location of bluetooth package
 from bluetooth import bluetooth_gap
@@ -87,7 +88,20 @@ class BtController:
             logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
 
         result = {}
-        if command == '1':
+        if command == 0:
+            result['bdaddr'] = bdaddr
+            result['handle'] = handle
+            try:
+                bluetooth_gatt.disable_notifications(bdaddr, handle)
+                result['result'] = bluetooth_constants.RESULT_OK
+            except bluetooth_exceptions.StateError as e:
+                result['result'] = e.args[0]
+            except bluetooth_exceptions.UnsupportedError as e:
+                result['result'] = e.args[0]
+            except dbus.exceptions.DBusException as e:
+                result['result'] = e.args[0]
+            logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))
+        elif command == 1:
             try:
                 bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
                 result['result'] = bluetooth_constants.RESULT_OK
@@ -96,17 +110,6 @@ class BtController:
             except bluetooth_exceptions.UnsupportedError as e:
                 result['result'] = e.args[0]
             logging.info("Notifications enabled: %s", json.JSONEncoder().encode(result))
-        elif command == '0':
-            result['bdaddr'] = bdaddr
-            result['handle'] = handle
-            try:
-                bluetooth_utils.log("calling disable_notifications\n")
-                rc = bluetooth_gatt.disable_notifications(bdaddr, handle)
-                bluetooth_utils.log("done calling disable_notifications\n")
-                result['result'] = bluetooth_constants.RESULT_OK
-                bluetooth_utils.log("finished\n")
-            except bluetooth_exceptions.StateError as e:
-                result['result'] = e.args[0]
-            except bluetooth_exceptions.UnsupportedError as e:
-                result['result'] = e.args[0]
-            logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))
+        else:
+            result['result'] = bluetooth_constants.RESULT_ERR_BAD_ARGS
+            logging.info("Bad command: %s", json.JSONEncoder().encode(result))

@@ -72,7 +72,7 @@ class CmdReadCharacteristic(Command):
 
 
 class CmdNotifications(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, command: str):
+    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, command: int):
         self.bt_controller = bt_controller
         self.bdaddr = bdaddr
         self.handle = handle
