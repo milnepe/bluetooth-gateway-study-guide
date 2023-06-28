@@ -7,6 +7,7 @@ from bluetooth import bluetooth_gap
 from bluetooth import bluetooth_gatt
 from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_utils
+from bluetooth import bluetooth_constants
 
 
 class BtController:
@@ -75,3 +76,29 @@ class BtController:
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
         logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
+
+    def notifications(self, bdaddr: str, handle: str) -> None:
+        """Read a characteristic using device address and handle"""
+        def notification_received(path, value):
+            result = {}
+            result['bdaddr'] = bdaddr
+            result['handle'] = path
+            result['value'] = bluetooth_utils.byteArrayToHexString(value)
+            # print(json.JSONEncoder().encode(result))
+            # stdout.flush()
+            logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+        result = {}
+        try:
+            bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
+            result['result'] = bluetooth_constants.RESULT_OK
+            # print(json.JSONEncoder().encode(result))
+            # stdout.flush()
+        except bluetooth_exceptions.StateError as e:
+            result['result'] = e.args[0]
+            # print(json.JSONEncoder().encode(result))
+            # stdout.flush()
+        except bluetooth_exceptions.UnsupportedError as e:
+            result['result'] = e.args[0]
+            # print(json.JSONEncoder().encode(result))
+            # stdout.flush()
+        logging.info("Notifications: %s", json.JSONEncoder().encode(result))
