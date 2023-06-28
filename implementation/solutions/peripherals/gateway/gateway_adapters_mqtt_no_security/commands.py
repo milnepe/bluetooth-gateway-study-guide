@@ -68,15 +68,16 @@ class CmdReadCharacteristic(Command):
         if self.bt_controller is not None:
             thread = Thread(target=self.bt_controller.read_characteristic, args=(self.bdaddr, self.handle))
             thread.start()
-            #thread.join()
+            # thread.join()
 
 
 class CmdNotifications(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str):
+    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, command: str):
         self.bt_controller = bt_controller
         self.bdaddr = bdaddr
         self.handle = handle
+        self.command = command
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            self.bt_controller.notifications(self.bdaddr, self.handle)
+            self.bt_controller.notifications(self.bdaddr, self.handle, self.command)

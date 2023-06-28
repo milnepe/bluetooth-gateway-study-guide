@@ -77,28 +77,36 @@ class BtController:
             result['result'] = e.args[0]
         logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
 
-    def notifications(self, bdaddr: str, handle: str) -> None:
+    def notifications(self, bdaddr: str, handle: str, command: str) -> None:
         """Read a characteristic using device address and handle"""
         def notification_received(path, value):
             result = {}
             result['bdaddr'] = bdaddr
             result['handle'] = path
             result['value'] = bluetooth_utils.byteArrayToHexString(value)
-            # print(json.JSONEncoder().encode(result))
-            # stdout.flush()
             logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+
         result = {}
-        try:
-            bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
-            result['result'] = bluetooth_constants.RESULT_OK
-            # print(json.JSONEncoder().encode(result))
-            # stdout.flush()
-        except bluetooth_exceptions.StateError as e:
-            result['result'] = e.args[0]
-            # print(json.JSONEncoder().encode(result))
-            # stdout.flush()
-        except bluetooth_exceptions.UnsupportedError as e:
-            result['result'] = e.args[0]
-            # print(json.JSONEncoder().encode(result))
-            # stdout.flush()
-        logging.info("Notifications: %s", json.JSONEncoder().encode(result))
+        if command == '1':
+            try:
+                bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
+                result['result'] = bluetooth_constants.RESULT_OK
+            except bluetooth_exceptions.StateError as e:
+                result['result'] = e.args[0]
+            except bluetooth_exceptions.UnsupportedError as e:
+                result['result'] = e.args[0]
+            logging.info("Notifications enabled: %s", json.JSONEncoder().encode(result))
+        elif command == '0':
+            result['bdaddr'] = bdaddr
+            result['handle'] = handle
+            try:
+                bluetooth_utils.log("calling disable_notifications\n")
+                rc = bluetooth_gatt.disable_notifications(bdaddr, handle)
+                bluetooth_utils.log("done calling disable_notifications\n")
+                result['result'] = bluetooth_constants.RESULT_OK
+                bluetooth_utils.log("finished\n")
+            except bluetooth_exceptions.StateError as e:
+                result['result'] = e.args[0]
+            except bluetooth_exceptions.UnsupportedError as e:
+                result['result'] = e.args[0]
+            logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))

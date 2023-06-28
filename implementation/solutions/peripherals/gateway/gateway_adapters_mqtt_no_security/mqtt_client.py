@@ -30,7 +30,9 @@ mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"9
 mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
 
 Notifications - Button
-mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f"}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":"1"}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":"0"}'
+
 
 """
 
@@ -102,8 +104,8 @@ def on_read_characteristic(mosq, obj, msg):
 def on_notifications(mosq, obj, msg):
     """Callback mapping TOPIC_ROOT + "/gateway/notifications" topic to CmdNotifications"""
     payload = json.loads(msg.payload)
-    invoker.set_command(CmdNotifications(bt_controller, payload['bdaddr'], payload['handle']))
-    logging.info("Read Characteristic: %s, %s", msg.topic, msg.payload.decode('utf-8'))
+    invoker.set_command(CmdNotifications(bt_controller, payload['bdaddr'], payload['handle'], payload['command']))
+    logging.info("Notifications: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_message(mosq, obj, msg):

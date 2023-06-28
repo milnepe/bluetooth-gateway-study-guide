@@ -15,7 +15,7 @@ from operator import itemgetter, attrgetter
 try:
     from gi.repository import GObject
 except ImportError:
-    #import gobject as GObject
+    # import gobject as GObject
     pass
 
 adapter_interface = None
