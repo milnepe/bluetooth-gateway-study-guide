@@ -24,9 +24,9 @@ mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"
 mosquitto_pub -h rock-4se -t "test/gateway/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
 
 Read temperature characteristic
-mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001f/char0022"}'
-mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001f/char0022"}'
-mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001f/char0022"}'
+mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
+mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}'
+mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
 mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
 
 """

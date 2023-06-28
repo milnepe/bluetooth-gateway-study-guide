@@ -1,4 +1,42 @@
 #!/usr/bin/python
+"""
+Notifications over websockets
+
+Start websocketd
+websocketd --port=8082 /usr/lib/cgi-bin/gateway/do_notifications.py
+
+# get ready
+import websocket
+import json
+ws = websocket.WebSocket()
+ws.connect("ws://localhost:8082")
+command = {}
+# enable button notifications (device must have been connected to using curl)
+command['command'] = 1
+command['bdaddr'] = "84:2E:14:31:C8:B0"
+command['handle'] = "/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f"
+ws.send(json.JSONEncoder().encode(command))
+ws.recv()
+# receive multiple notifications, executing ws.recv() around once every second
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+ws.recv()
+# disable notifications
+command['command'] = 0
+ws.send(json.JSONEncoder().encode(command))
+ws.recv()
+# terminate and exit
+command['command'] = 9
+ws.send(json.JSONEncoder().encode(command))
+ws.recv()
+"""
 import json
 from sys import stdin, stdout
 
