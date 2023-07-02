@@ -14,11 +14,11 @@ and takes a char value of "00" for off and "01" for on - see output from do_read
 			"characteristic_handle": "/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034"
 
 Turn on led
-curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" , "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034" , "value":"01"}' --request PUT http://localhost/cgi-bin/gateway/gateway_adapters_no_security/do_write_characteristic.py
+curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" , "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034" , "value":"01"}' --request PUT http://localhost/cgi-bin/gateway/do_write_characteristic.py
 {"bdaddr": "84:2E:14:31:C8:B0", "handle": "/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "result": 0}
 
 Turn off led
-curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" , "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034" , "value":"00"}' --request PUT http://localhost/cgi-bin/gateway/gateway_adapters_no_security/do_write_characteristic.py
+curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" , "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034" , "value":"00"}' --request PUT http://localhost/cgi-bin/gateway/do_write_characteristic.py
 {"bdaddr": "84:2E:14:31:C8:B0", "handle": "/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "result": 0}
 """
 import os

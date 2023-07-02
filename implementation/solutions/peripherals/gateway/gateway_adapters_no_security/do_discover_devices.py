@@ -9,7 +9,7 @@ http://rock-3c/cgi-bin/gateway/gateway_adapters_no_security/do_discover_devices.
 [{"bdaddr": "84:2E:14:31:C8:B0"...]
 
 Should fail:
-curl --header "Content-Type: application/json" --request PUT http://localhost/cgi-bin/gateway/gateway_adapters_no_security/do_discover_devices.py?scantime=3000
+curl --header "Content-Type: application/json" --request PUT http://localhost/cgi-bin/gateway/do_discover_devices.py?scantime=3000
 Status-Line: HTTP/1.0 405 Method Not Allowed
 """
 import os

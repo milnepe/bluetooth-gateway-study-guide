@@ -4,7 +4,7 @@ Connect device test
 Device must be advertising and do_discover_devices ran before hand
 
 Should pass:
-rock@rock-3c:~$ curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" }' --request PUT http://localhost/cgi-bin/gateway/gateway_adapters_no_security/do_connect.py
+curl --header "Content-Type: application/json" --data '{"bdaddr":"84:2E:14:31:C8:B0" }' --request PUT http://localhost/cgi-bin/gateway/do_connect.py
 {"result": 0}
 
 If connection fails run do_discover_devices again

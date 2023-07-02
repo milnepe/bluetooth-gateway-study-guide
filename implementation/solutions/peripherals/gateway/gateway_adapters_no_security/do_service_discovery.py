@@ -4,7 +4,7 @@ Service discovery test
 Discover and connect to device before running:
 
 Should pass:
-curl --request GET http://localhost/cgi-bin/gateway/gateway_adapters_no_security/do_service_discovery.py?bdaddr=84:2E:14:31:C8:B0
+curl --request GET http://localhost/cgi-bin/gateway/do_service_discovery.py?bdaddr=84:2E:14:31:C8:B0
 [{"UUID": "00001801-0000-1000-8000-00805f9b34fb", "handle": "/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service0001"...]
 """
 import os

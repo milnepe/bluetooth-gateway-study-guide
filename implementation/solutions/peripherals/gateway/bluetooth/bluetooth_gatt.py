@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import logging
 from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_general
 from bluetooth import bluetooth_exceptions
@@ -287,7 +288,9 @@ def enable_notifications(bdaddr, characteristic_path, callback):
     if 'notify' not in characteristic_properties and 'indicate' not in characteristic_properties:
         raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
 
+    # Returns dbus.Boolean!
     notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
+    notifying = bool(notifying)
     if notifying is True:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
 
@@ -317,6 +320,7 @@ def disable_notifications(bdaddr, characteristic_path):
         raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
 
     notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
+    notifying = bool(notifying)    
     if notifying is False:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
 
