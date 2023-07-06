@@ -2,6 +2,10 @@ import logging
 import sys
 import json
 import dbus
+import central
+from pprint import pprint
+from time import sleep
+
 
 sys.path.insert(0, '..')  # Aid location of bluetooth package
 from bluetooth import bluetooth_gap
@@ -10,21 +14,32 @@ from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_constants
 
+dongle = central.BluezProxy(central.ADAPTER_PATH, central.BLUEZ_ADAPTER)
+
 
 class BtController:
 
     def discover_devices(self, scantime: str) -> None:
         """Discover devices in controller with optional timeout"""
-        devices_discovered = bluetooth_gap.discover_devices(int(scantime))
-        devices_discovered_json = json.JSONEncoder().encode(devices_discovered)
-        logging.info("Discover devices: %s", devices_discovered_json)
+        print(f"Discovery Filters: {central.dbus_to_python(dongle.GetDiscoveryFilters())}")
+        print(f"Powered: {dongle.get('Powered')}")
+        pprint(dongle.get_all())
+        # devices_discovered = bluetooth_gap.discover_devices(int(scantime))
+        # devices_discovered_json = json.JSONEncoder().encode(devices_discovered)
+        # logging.info("Discover devices: %s", devices_discovered_json)
 
     def connect_device(self, bdaddr: str) -> None:
         """Connect device using address"""
-        result = {}
-        rc = bluetooth_gap.connect(bdaddr)
-        result['result'] = rc
-        logging.info("Connect device: %s", result)
+        DEVICE_ADDR = bdaddr
+        DEVICE_PATH = f"{central.ADAPTER_PATH}/dev_{DEVICE_ADDR.replace(':', '_')}"
+        device = central.BluezProxy(DEVICE_PATH, central.BLUEZ_DEVICE)
+        device.Connect()
+        while not device.get("ServicesResolved"):
+            sleep(0.5)
+        # result = {}
+        # rc = bluetooth_gap.connect(bdaddr)
+        # result['result'] = rc
+        # logging.info("Connect device: %s", result)
 
     def write_characteristic(self, bdaddr: str, handle: str, value: str) -> None:
         """Write a value to the characteristic using device address"""
