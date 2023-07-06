@@ -1,5 +1,5 @@
 # bluetooth-gateway-study-guide
-My debugged version of the Python Bluetooth Internet Gateways Study Guide from Bluetooth SIG V2_0_1
+Debugged version of the Python Bluetooth Internet Gateways Study Guide from Bluetooth SIG V2_0_1
 
 A web BLE gateway based on an embedded HTTP server (Apache2) and WS (Websocketd) with my added MQTT adapter
 
