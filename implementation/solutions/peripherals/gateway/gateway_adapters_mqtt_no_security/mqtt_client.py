@@ -58,9 +58,9 @@ from bt_controller import BtController
 from invoker import Invoker
 
 if sys.argv[1]:
-	BROKER = sys.argv[1]
+    BROKER = sys.argv[1]
 else:
-	BROKER = 'localhost'
+    BROKER = 'localhost'
 TOPIC_ROOT = "test"
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
