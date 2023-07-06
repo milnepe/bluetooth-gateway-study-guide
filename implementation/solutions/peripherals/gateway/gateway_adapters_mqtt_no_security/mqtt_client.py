@@ -46,6 +46,7 @@ mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:1
 import paho.mqtt.client as mqtt
 import logging
 import json
+import sys
 
 from commands import CmdDiscoverDevices
 from commands import CmdConnectDevice
@@ -56,7 +57,10 @@ from commands import CmdNotifications
 from bt_controller import BtController
 from invoker import Invoker
 
-BROKER = 'rock-4se'
+if sys.argv[1]:
+	BROKER = sys.argv[1]
+else:
+	BROKER = 'localhost'
 TOPIC_ROOT = "test"
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
