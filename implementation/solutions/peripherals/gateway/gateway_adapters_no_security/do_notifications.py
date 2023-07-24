@@ -16,21 +16,21 @@ from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_constants
 from bluetooth import bluetooth_utils
 
-bdaddr = None
-handle = None
-
 
 def notification_received(path, value):
     result = {}
+    filter_path = f"{path.replace('_', ':')}"
     result['bdaddr'] = bdaddr
     result['handle'] = path
     result['value'] = bluetooth_utils.byteArrayToHexString(value)
-    print(json.JSONEncoder().encode(result))
+    if bdaddr in filter_path:
+        print(json.JSONEncoder().encode(result))
     stdout.flush()
 
 
 keep_going = 1
 bluetooth_utils.log("====== do_notifications ======\n")
+
 while keep_going == 1:
     line = stdin.readline()
     bluetooth_utils.log(line+"\n")
