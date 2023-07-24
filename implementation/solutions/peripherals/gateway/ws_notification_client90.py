@@ -1,12 +1,16 @@
 #!/usr/bin/python
 """
-Client to receive BLE notifications over websockets
+Client to receive BLE notifications over websockets (Thunderboard)
 
-Start websocketd
+1. Start websocketd
 websocketd --port=8082 /usr/lib/cgi-bin/gateway/do_notifications.py
 
-Then run script in another terminal
-./ws_notification_client.py
+2. Connect device using bluetoothctl
+
+3. run script in another terminal
+./ws_notification_client90.py
+
+4. Press BTN0 to receive notifications
 """
 import websocket
 import json
