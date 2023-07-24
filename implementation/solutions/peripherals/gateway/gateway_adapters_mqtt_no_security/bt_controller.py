@@ -82,10 +82,13 @@ class BtController:
         """Read a characteristic using device address and handle"""
         def notification_received(path, value):
             result = {}
+            filter_path = f"{handle.replace('_', ':')}"
+            logging.info("Addr: %s Filter path: %s", bdaddr, filter_path)
             result['bdaddr'] = bdaddr
-            result['handle'] = path
+            result['handle'] = handle
             result['value'] = bluetooth_utils.byteArrayToHexString(value)
-            logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+            if bdaddr in filter_path:
+                logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
 
         result = {}
         if command == 0:
