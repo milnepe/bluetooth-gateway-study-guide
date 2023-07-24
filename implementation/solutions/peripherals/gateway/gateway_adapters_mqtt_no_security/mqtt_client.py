@@ -31,14 +31,14 @@ mosquitto_pub -h rock-4se -t "test/gateway/read_characteristic" -m '{"bdaddr":"8
 
 Notifications
 Enable button notifications "UUID": "00002a56-0000-1000-8000-00805f9b34fb"
-mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":1}'
-mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":1}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":1}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":1}'
 mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":1}'
 mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":1}'
 
 Disable
-mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":0}'
-mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":0}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":0}'
+mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":0}'
 mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":0}'
 mosquitto_pub -h rock-4se -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":0}'
 """
