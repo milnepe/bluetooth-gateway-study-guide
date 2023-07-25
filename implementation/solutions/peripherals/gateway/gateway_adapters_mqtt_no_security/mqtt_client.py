@@ -57,9 +57,10 @@ from commands import CmdNotifications
 from bt_controller import BtController
 from invoker import Invoker
 
-if sys.argv[1] is not None:
-    BROKER = sys.argv[1]
-else:
+try:
+    if sys.argv[1] is not null:
+        BROKER = sys.argv[1]
+except:
     BROKER = 'localhost'
 TOPIC_ROOT = "test"
 

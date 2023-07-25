@@ -7,7 +7,8 @@ from bluetooth import bluetooth_constants
 import dbus
 import dbus.mainloop.glib
 from dbus import ByteArray
-import threading
+from threading import Thread
+from threading import local
 from sys import stdin, stdout
 import time
 import codecs
@@ -20,8 +21,8 @@ except ImportError:
     pass
 
 adapter_interface = None
-mainloop = None
-thread = None
+#mainloop = None
+#thread = None
 notifications_callback = None
 
 # must set main loop before acquiring SystemBus object
@@ -245,7 +246,7 @@ def properties_changed(interface, changed, invalidated, path):
         return
     if notifications_callback:
         notifications_callback(path, value)
-    stdout.flush()
+    #stdout.flush()
 
 
 def stop_handler():
@@ -269,7 +270,11 @@ def start_notifications(characteristic_iface):
 def enable_notifications(bdaddr, characteristic_path, callback):
     global notifications_callback
     #global thread
+    #local_storage = local()
+    #local_storage.bdaddr = bdaddr
     notifications_callback = callback
+    #device_proxy = bluetooth_general.getDeviceProxy(bus, local_storage.bdaddr)
+    logging.info("BDADDR: %s", bdaddr)
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
     device_path = device_proxy.object_path
 
@@ -294,7 +299,8 @@ def enable_notifications(bdaddr, characteristic_path, callback):
     if notifying is True:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
 
-    thread = threading.Thread(target=start_notifications, args=(characteristic_iface, ))
+    #start_notifications(characteristic_iface)
+    thread = Thread(target=start_notifications, args=(characteristic_iface, ))
     thread.daemon = True
     thread.start()
 
