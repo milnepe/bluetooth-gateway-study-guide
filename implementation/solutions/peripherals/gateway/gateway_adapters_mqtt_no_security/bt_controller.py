@@ -10,7 +10,6 @@ from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_constants
 
-
 class BtController:
 
     def discover_devices(self, scantime: str) -> None:
@@ -79,21 +78,19 @@ class BtController:
         logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
 
     def notifications(self, bdaddr: str, handle: str, command: str) -> None:
-        """Read a characteristic using device address and handle"""
-        def notification_received(path, value):
+        """Handle notifications"""
+        def notification_received(handle, value):
             result = {}
             filter_path = f"{handle.replace('_', ':')}"
             logging.info("Addr: %s Filter path: %s", bdaddr, filter_path)
             result['bdaddr'] = bdaddr
             result['handle'] = handle
             result['value'] = bluetooth_utils.byteArrayToHexString(value)
-            if bdaddr in filter_path:
-                logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+            #if bdaddr in filter_path:
+            logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
 
         result = {}
         if command == 0:
-            result['bdaddr'] = bdaddr
-            result['handle'] = handle
             try:
                 bluetooth_gatt.disable_notifications(bdaddr, handle)
                 result['result'] = bluetooth_constants.RESULT_OK
@@ -105,6 +102,10 @@ class BtController:
                 result['result'] = e.args[0]
             logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))
         elif command == 1:
+            #dbaddr = bdaddr
+            #path = handle
+            result['bdaddr'] = bdaddr
+            result['handle'] = handle
             try:
                 bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
                 result['result'] = bluetooth_constants.RESULT_OK

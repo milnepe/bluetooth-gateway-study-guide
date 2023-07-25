@@ -268,7 +268,7 @@ def start_notifications(characteristic_iface):
 
 def enable_notifications(bdaddr, characteristic_path, callback):
     global notifications_callback
-    global thread
+    #global thread
     notifications_callback = callback
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
     device_path = device_proxy.object_path
