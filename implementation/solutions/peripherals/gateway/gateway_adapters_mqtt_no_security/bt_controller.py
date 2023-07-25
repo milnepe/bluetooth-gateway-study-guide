@@ -108,12 +108,7 @@ class BtController:
                 result['result'] = e.args[0]
             logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))
         elif command == 1:
-            #global addresses
             addresses.append(bdaddr)
-            #dbaddr = bdaddr
-            #path = handle
-            #result['bdaddr'] = bdaddr
-            #result['handle'] = handle
             try:
                 bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
                 result['result'] = bluetooth_constants.RESULT_OK
