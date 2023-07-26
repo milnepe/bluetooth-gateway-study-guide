@@ -46,3 +46,9 @@ def dbus_to_python(data):
             new_data[key] = dbus_to_python(data[key])
         data = new_data
     return data
+
+
+def big_to_little(b_endian: str) -> str:
+    l_endian = bytearray.fromhex(b_endian)
+    l_endian.reverse()
+    return ''.join(format(x, '02x') for x in l_endian)

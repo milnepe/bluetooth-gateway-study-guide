@@ -10,6 +10,8 @@ from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_constants
 
+import paho.mqtt.publish as publish
+
 
 class BtController:
 
@@ -65,7 +67,11 @@ class BtController:
             result['result'] = e.args[0]
         logging.info("Discover services: %s", result)
 
-    def read_characteristic(self, bdaddr: str, handle: str) -> None:
+    @staticmethod
+    def publisher(data: str):
+        publish.single(bluetooth_constants.TOPIC_ROOT + "/out/data", data, hostname=bluetooth_constants.BROKER)
+
+    def read_characteristic(self, bdaddr: str, handle: str):
         """Read a characteristic using device address and handle"""
         result = {}
         result['bdaddr'] = bdaddr
@@ -76,7 +82,9 @@ class BtController:
             result['result'] = 0
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
+        json_result = json.JSONEncoder().encode(result)
+        logging.info("Read characteristic: %s", json_result)
+        BtController.publisher(json_result)  # Publish result
 
     @staticmethod
     def notification_received(handle, value):

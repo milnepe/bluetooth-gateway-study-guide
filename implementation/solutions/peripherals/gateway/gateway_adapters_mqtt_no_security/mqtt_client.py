@@ -26,8 +26,8 @@ mosquitto_pub -h localhost -t "test/gateway/write_characteristic" -m '{"bdaddr":
 Read temperature characteristic - "UUID": "00002a6e-0000-1000-8000-00805f9b34fb"
 mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}'
-mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
-mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
 
 Notifications
 Enable button notifications "UUID": "00002a56-0000-1000-8000-00805f9b34fb"
@@ -48,6 +48,9 @@ import logging
 import json
 import sys
 
+sys.path.insert(0, '..')  # Aid location of bluetooth package
+from bluetooth import bluetooth_constants
+
 from commands import CmdDiscoverDevices
 from commands import CmdConnectDevice
 from commands import CmdWriteCharacteristic
@@ -57,26 +60,10 @@ from commands import CmdNotifications
 from bt_controller import BtController
 from invoker import Invoker
 
-try:
-    if sys.argv[1] is not null:
-        BROKER = sys.argv[1]
-except:
-    BROKER = 'localhost'
-
-TOPIC_ROOT = "test"
-
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
 bt_controller = BtController()
 invoker = Invoker()
-
-# def plc_lookup(topic: str) -> Plcs:
-#     """Return PLC in sub-topic"""
-#     sub_topic = topic.split('/')
-#     try:
-#         return plcs[sub_topic[1]]
-#     except KeyError:
-#         return None
 
 
 def on_discover_devices(mosq, obj, msg):
@@ -130,16 +117,16 @@ def main() -> None:
 
     mqttc = mqtt.Client()
 
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/discover_devices", on_discover_devices)
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/connect_device", on_connect_device)
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/write_characteristic", on_write_characteristic)
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/discover_services", on_discover_services)
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/read_characteristic", on_read_characteristic)
-    mqttc.message_callback_add(TOPIC_ROOT + "/gateway/notifications", on_notifications)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/discover_devices", on_discover_devices)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/connect_device", on_connect_device)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/write_characteristic", on_write_characteristic)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/discover_services", on_discover_services)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/read_characteristic", on_read_characteristic)
+    mqttc.message_callback_add(bluetooth_constants.TOPIC_ROOT + "/in/notifications", on_notifications)
 
     mqttc.on_message = on_message
-    mqttc.connect(BROKER, 1883, 60)
-    mqttc.subscribe(TOPIC_ROOT + "/#", 0)
+    mqttc.connect(bluetooth_constants.BROKER, 1883, 60)
+    mqttc.subscribe(bluetooth_constants.TOPIC_ROOT + "/in/#", 0)
 
     mqttc.loop_start()
 
