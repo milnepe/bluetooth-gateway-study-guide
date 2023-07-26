@@ -62,6 +62,7 @@ try:
         BROKER = sys.argv[1]
 except:
     BROKER = 'localhost'
+
 TOPIC_ROOT = "test"
 
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)

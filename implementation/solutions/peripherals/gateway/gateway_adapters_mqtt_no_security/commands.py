@@ -1,7 +1,7 @@
 import logging
+from dataclasses import dataclass
 from bt_controller import BtController
 from threading import Thread
-from threading import local
 
 
 class Command:
@@ -9,10 +9,10 @@ class Command:
         raise NotImplementedError
 
 
+@dataclass
 class CmdDiscoverDevices(Command):
-    def __init__(self, bt_controller: BtController, scantime: str):
-        self.bt_controller = bt_controller
-        self.scantime = scantime
+    bt_controller: BtController
+    scantime: str
 
     def execute(self) -> None:
         if self.bt_controller is not None:
@@ -22,10 +22,10 @@ class CmdDiscoverDevices(Command):
             thread.join()
 
 
+@dataclass
 class CmdConnectDevice(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str):
-        self.bt_controller = bt_controller
-        self.bdaddr = bdaddr
+    bt_controller: BtController
+    bdaddr: str
 
     def execute(self) -> None:
         if self.bt_controller is not None:
@@ -34,12 +34,12 @@ class CmdConnectDevice(Command):
             thread.join()
 
 
+@dataclass
 class CmdWriteCharacteristic(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, value: str):
-        self.bt_controller = bt_controller
-        self.bdaddr = bdaddr
-        self.handle = handle
-        self.value = value
+    bt_controller: BtController
+    bdaddr: str
+    handle: str
+    value: str
 
     def execute(self) -> None:
         if self.bt_controller is not None:
@@ -48,10 +48,10 @@ class CmdWriteCharacteristic(Command):
             thread.join()
 
 
+@dataclass
 class CmdDiscoverServices(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str):
-        self.bt_controller = bt_controller
-        self.bdaddr = bdaddr
+    bt_controller: BtController
+    bdaddr: str
 
     def execute(self) -> None:
         if self.bt_controller is not None:
@@ -60,11 +60,11 @@ class CmdDiscoverServices(Command):
             thread.join()
 
 
+@dataclass
 class CmdReadCharacteristic(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str):
-        self.bt_controller = bt_controller
-        self.bdaddr = bdaddr
-        self.handle = handle
+    bt_controller: BtController
+    bdaddr: str
+    handle: str
 
     def execute(self) -> None:
         if self.bt_controller is not None:
@@ -73,15 +73,13 @@ class CmdReadCharacteristic(Command):
             thread.join()
 
 
+@dataclass
 class CmdNotifications(Command):
-    def __init__(self, bt_controller: BtController, bdaddr: str, handle: str, command: int):
-        self.bt_controller = bt_controller
-        self.bdaddr = bdaddr
-        self.handle = handle
-        self.command = command
+    bt_controller: BtController
+    bdaddr: str
+    handle: str
+    command: int
 
     def execute(self) -> None:
-        local_storage = local()
-        local_storage.bdaddr = self.bdaddr
         if self.bt_controller is not None:
             self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
