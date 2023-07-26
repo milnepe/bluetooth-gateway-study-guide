@@ -270,7 +270,6 @@ def start_notifications(characteristic_iface):
 def enable_notifications(bdaddr, characteristic_path, callback):
     global notifications_callback
     notifications_callback = callback
-    logging.info("BDADDR: %s", bdaddr)
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
     device_path = device_proxy.object_path
 

@@ -10,7 +10,6 @@ from bluetooth import bluetooth_exceptions
 from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_constants
 
-addresses = []
 
 class BtController:
 
@@ -79,22 +78,18 @@ class BtController:
             result['result'] = e.args[0]
         logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
 
+    @staticmethod
+    def notification_received(handle, value):
+        """Notifications callback"""
+        result = {}
+        bdaddr = handle.replace('_', ':')[20:37]  # Hack!
+        result['bdaddr'] = bdaddr
+        result['handle'] = handle
+        result['value'] = bluetooth_utils.byteArrayToHexString(value)
+        logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+
     def notifications(self, bdaddr: str, handle: str, command: str) -> None:
         """Handle notifications"""
-        def notification_received(handle, value):
-            result = {}
-            filter_path = f"{handle.replace('_', ':')}"
-            #logging.info("Filter path: %s", filter_path)
-            #result['bdaddr'] = bdaddr
-            result['handle'] = handle
-            result['value'] = bluetooth_utils.byteArrayToHexString(value)
-            for a in addresses:
-                logging.info("A: %s", a) 
-                if a in filter_path:
-                    result['bdaddr'] = a
-                    logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
-                    break
-
         result = {}
         if command == 0:
             try:
@@ -108,9 +103,8 @@ class BtController:
                 result['result'] = e.args[0]
             logging.info("Notifications disabled: %s", json.JSONEncoder().encode(result))
         elif command == 1:
-            addresses.append(bdaddr)
             try:
-                bluetooth_gatt.enable_notifications(bdaddr, handle, notification_received)
+                bluetooth_gatt.enable_notifications(bdaddr, handle, BtController.notification_received)
                 result['result'] = bluetooth_constants.RESULT_OK
             except bluetooth_exceptions.StateError as e:
                 result['result'] = e.args[0]

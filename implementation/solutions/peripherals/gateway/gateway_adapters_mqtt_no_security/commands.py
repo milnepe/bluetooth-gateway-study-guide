@@ -70,7 +70,7 @@ class CmdReadCharacteristic(Command):
         if self.bt_controller is not None:
             thread = Thread(target=self.bt_controller.read_characteristic, args=(self.bdaddr, self.handle))
             thread.start()
-            # thread.join()
+            thread.join()
 
 
 class CmdNotifications(Command):
@@ -83,10 +83,5 @@ class CmdNotifications(Command):
     def execute(self) -> None:
         local_storage = local()
         local_storage.bdaddr = self.bdaddr
-        logging.info("Executing BtController DBADDR: %s, HANDLE: %s CMD: %s", local_storage.bdaddr, self.handle, self.command)
         if self.bt_controller is not None:
             self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
-            #thread = Thread(target=self.bt_controller.notifications, args=(local_storage.bdaddr, self.handle, self.command))
-            #thread.daemon = True
-            #thread.start()
-            #thread.join()
