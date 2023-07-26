@@ -15,14 +15,13 @@ import codecs
 from operator import itemgetter, attrgetter
 
 try:
-    from gi.repository import GObject
+    # from gi.repository import GObject
+    import gi.repository.GLib
 except ImportError:
     # import gobject as GObject
-    pass
+    print("gi.repository.GLib import not found")
 
-adapter_interface = None
-mainloop = None
-thread = None
+# mainloop = None
 notifications_callback = None
 
 # must set main loop before acquiring SystemBus object
@@ -246,7 +245,7 @@ def properties_changed(interface, changed, invalidated, path):
         return
     if notifications_callback:
         notifications_callback(path, value)
-    #stdout.flush()
+    # stdout.flush()
 
 
 def stop_handler():
@@ -263,7 +262,8 @@ def start_notifications(characteristic_iface):
     bus.add_signal_receiver(stop_handler, "StopNotifications")
 
     characteristic_iface.StartNotify()
-    mainloop = GObject.MainLoop()
+    # mainloop = GObject.MainLoop()
+    mainloop = gi.repository.GLib.MainLoop()
     mainloop.run()
 
 
@@ -321,7 +321,7 @@ def disable_notifications(bdaddr, characteristic_path):
         raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
 
     notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
-    notifying = bool(notifying)    
+    notifying = bool(notifying)
     if notifying is False:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
 
