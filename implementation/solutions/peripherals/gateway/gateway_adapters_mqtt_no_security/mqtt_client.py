@@ -3,44 +3,44 @@
 MQTT client for discovering BLE devices & connecting
 
 Discover devices that are advertising:
-mosquitto_pub -h localhost -t "test/gateway/discover_devices" -m '{"scantime":"3000"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_devices" -m '{"scantime":"3000"}'
 
 Connect to device using its address:
-mosquitto_pub -h localhost -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
-mosquitto_pub -h localhost -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
-mosquitto_pub -h localhost -t "test/gateway/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
-mosquitto_pub -h localhost -t "test/gateway/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
 
 Discover services
-mosquitto_pub -h localhost -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
-mosquitto_pub -h localhost -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
-mosquitto_pub -h localhost -t "test/gateway/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
-mosquitto_pub -h localhost -t "test/gateway/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
 
 Write to LED characteristic - "UUID": "00001815-0000-1000-8000-00805f9b34fb"
-mosquitto_pub -h localhost -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0048", "value":"01"}'
-mosquitto_pub -h localhost -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0048", "value":"01"}'
-mosquitto_pub -h localhost -t "test/gateway/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0048", "value":"01"}'
-mosquitto_pub -h localhost -t "test/gateway/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
+mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0048", "value":"01"}'
+mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0048", "value":"01"}'
+mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0048", "value":"01"}'
+mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
 
 Read temperature characteristic - "UUID": "00002a6e-0000-1000-8000-00805f9b34fb"
-mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
-mosquitto_pub -h localhost -t "test/gateway/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
 
 Notifications
 Enable button notifications "UUID": "00002a56-0000-1000-8000-00805f9b34fb"
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":1}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":1}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":1}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":1}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":1}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":1}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":1}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":1}'
 
 Disable
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":0}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":0}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":0}'
-mosquitto_pub -h localhost -t "test/gateway/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":0}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":0}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":0}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":0}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":0}'
 """
 
 import paho.mqtt.client as mqtt
@@ -67,42 +67,42 @@ invoker = Invoker()
 
 
 def on_discover_devices(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/discover_devices" topic to CmdDiscoverDevices"""
+    """Callback mapping TOPIC_ROOT + "/in/discover_devices" topic to CmdDiscoverDevices"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdDiscoverDevices(bt_controller, payload['scantime']))
     logging.info("Discover devices: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_connect_device(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/connect_device" topic to CmdConnectDevice"""
+    """Callback mapping TOPIC_ROOT + "/in/connect_device" topic to CmdConnectDevice"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdConnectDevice(bt_controller, payload['bdaddr']))
     logging.info("Connect device: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_write_characteristic(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/write_characteristic" topic to CmdWriteCharacteristic"""
+    """Callback mapping TOPIC_ROOT + "/in/write_characteristic" topic to CmdWriteCharacteristic"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdWriteCharacteristic(bt_controller, payload['bdaddr'], payload['handle'], payload['value']))
     logging.info("Write Characteristic: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_discover_services(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/discover_services" topic to CmdDiscoverServices"""
+    """Callback mapping TOPIC_ROOT + "/in/discover_services" topic to CmdDiscoverServices"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdDiscoverServices(bt_controller, payload['bdaddr']))
     logging.info("Discover Services: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_read_characteristic(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/read_characteristic" topic to CmdReadCharacteristic"""
+    """Callback mapping TOPIC_ROOT + "/in/read_characteristic" topic to CmdReadCharacteristic"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdReadCharacteristic(bt_controller, payload['bdaddr'], payload['handle']))
     logging.info("Read Characteristic: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
 def on_notifications(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/gateway/notifications" topic to CmdNotifications"""
+    """Callback mapping TOPIC_ROOT + "/in/notifications" topic to CmdNotifications"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdNotifications(bt_controller, payload['bdaddr'], payload['handle'], payload['command']))
     logging.info("Notifications: %s, %s", msg.topic, msg.payload.decode('utf-8'))
