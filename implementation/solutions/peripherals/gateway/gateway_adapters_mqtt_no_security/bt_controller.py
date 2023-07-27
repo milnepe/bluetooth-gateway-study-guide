@@ -15,6 +15,11 @@ import paho.mqtt.publish as publish
 
 class BtController:
 
+    @staticmethod
+    def publisher(topic: str, result: dict):
+        json_result = json.JSONEncoder().encode(result)
+        publish.single(bluetooth_constants.TOPIC_ROOT + "/out/" + topic, json_result, hostname=bluetooth_constants.BROKER)
+
     def discover_devices(self, scantime: str) -> None:
         """Discover devices in controller with optional timeout"""
         devices_discovered = bluetooth_gap.discover_devices(int(scantime))
@@ -26,7 +31,9 @@ class BtController:
         result = {}
         rc = bluetooth_gap.connect(bdaddr)
         result['result'] = rc
+        result['bdaddr'] = bdaddr
         logging.info("Connect device: %s", result)
+        BtController.publisher("connection", result)  # Publish result
 
     def write_characteristic(self, bdaddr: str, handle: str, value: str) -> None:
         """Write a value to the characteristic using device address"""
@@ -38,7 +45,8 @@ class BtController:
             result['result'] = rc
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Connect device: %s", result)
+        logging.info("Write characteristic: %s", json.JSONEncoder().encode(result))
+        BtController.publisher("sensor", result)  # Publish result
 
     def discover_services(self, bdaddr: str) -> None:
         """Discover services using device address"""
@@ -65,11 +73,8 @@ class BtController:
             result = json.JSONEncoder().encode(services_discovered)
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Discover services: %s", result)
-
-    @staticmethod
-    def publisher(data: str):
-        publish.single(bluetooth_constants.TOPIC_ROOT + "/out/data", data, hostname=bluetooth_constants.BROKER)
+        logging.info("Discover services: %s", json.JSONEncoder().encode(result))
+        BtController.publisher("services", result)  # Publish result
 
     def read_characteristic(self, bdaddr: str, handle: str):
         """Read a characteristic using device address and handle"""
@@ -82,9 +87,8 @@ class BtController:
             result['result'] = 0
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        json_result = json.JSONEncoder().encode(result)
-        logging.info("Read characteristic: %s", json_result)
-        BtController.publisher(json_result)  # Publish result
+        logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
+        BtController.publisher("sensor", result)
 
     @staticmethod
     def notification_received(handle, value):
