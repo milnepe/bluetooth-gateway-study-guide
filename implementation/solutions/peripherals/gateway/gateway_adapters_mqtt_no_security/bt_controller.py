@@ -23,8 +23,9 @@ class BtController:
     def discover_devices(self, scantime: str) -> None:
         """Discover devices in controller with optional timeout"""
         devices_discovered = bluetooth_gap.discover_devices(int(scantime))
-        devices_discovered_json = json.JSONEncoder().encode(devices_discovered)
-        logging.info("Discover devices: %s", devices_discovered_json)
+        json_devices_discovered = json.JSONEncoder().encode(devices_discovered)
+        logging.info("Discover devices: %s", json_devices_discovered)
+        BtController.publisher("devices", json_devices_discovered)  # Publish result
 
     def connect_device(self, bdaddr: str) -> None:
         """Connect device using address"""
@@ -32,7 +33,8 @@ class BtController:
         rc = bluetooth_gap.connect(bdaddr)
         result['result'] = rc
         result['bdaddr'] = bdaddr
-        logging.info("Connect device: %s", result)
+        result['cmd'] = "connect_device"
+        logging.info(json.JSONEncoder().encode(result))
         BtController.publisher("connection", result)  # Publish result
 
     def write_characteristic(self, bdaddr: str, handle: str, value: str) -> None:
@@ -40,17 +42,20 @@ class BtController:
         result = {}
         result['bdaddr'] = bdaddr
         result['handle'] = handle
+        result['cmd'] = "write_characteristic"
+        result['value'] = value
         try:
             rc = bluetooth_gatt.write_characteristic(bdaddr, handle, value)
             result['result'] = rc
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Write characteristic: %s", json.JSONEncoder().encode(result))
+        logging.info(json.JSONEncoder().encode(result))
         BtController.publisher("sensor", result)  # Publish result
 
     def discover_services(self, bdaddr: str) -> None:
         """Discover services using device address"""
         result = {}
+        result['cmd'] = "discover_services"
         try:
             services_discovered = bluetooth_gatt.get_services(bdaddr)
 
@@ -73,7 +78,7 @@ class BtController:
             result = json.JSONEncoder().encode(services_discovered)
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Discover services: %s", json.JSONEncoder().encode(result))
+        logging.info(json.JSONEncoder().encode(result))
         BtController.publisher("services", result)  # Publish result
 
     def read_characteristic(self, bdaddr: str, handle: str):
@@ -81,13 +86,14 @@ class BtController:
         result = {}
         result['bdaddr'] = bdaddr
         result['handle'] = handle
+        result['cmd'] = "read_characteristic"
         try:
             value = bluetooth_gatt.read_characteristic(bdaddr, handle)
             result['value'] = bluetooth_utils.byteArrayToHexString(value)
             result['result'] = 0
         except bluetooth_exceptions.StateError as e:
             result['result'] = e.args[0]
-        logging.info("Read characteristic: %s", json.JSONEncoder().encode(result))
+        logging.info(json.JSONEncoder().encode(result))
         BtController.publisher("sensor", result)
 
     @staticmethod
@@ -97,8 +103,9 @@ class BtController:
         bdaddr = handle.replace('_', ':')[20:37]  # Hack!
         result['bdaddr'] = bdaddr
         result['handle'] = handle
+        result['cmd'] = "notification_received"
         result['value'] = bluetooth_utils.byteArrayToHexString(value)
-        logging.info("Notification CB: %s", json.JSONEncoder().encode(result))
+        logging.info(json.JSONEncoder().encode(result))
 
     def notifications(self, bdaddr: str, handle: str, command: str) -> None:
         """Handle notifications"""
