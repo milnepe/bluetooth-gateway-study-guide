@@ -1,46 +1,50 @@
 #!/usr/bin/python
 """
-MQTT client for discovering BLE devices & connecting
+MQTT / BLE gateway client supports remote commands:
+Device discovery, device connection, reading & writing characteristic and notifications
+
+
+Example MQTT commands:
 
 Discover devices that are advertising:
 mosquitto_pub -h localhost -t "test/gateway/in/discover_devices" -m '{"scantime":"3000"}'
 
 Connect to device using its address:
-mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
-mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
-mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
-mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'  # 02 Thunder Sense #46565
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'  # 04 Thunder Sense #32540
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'  # 05 Thunderboard #51376
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"58:8E:81:A5:4B:10"}'  # 06 Thunderboard #19216
 
 Discover services
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
-mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7E:E0"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"58:8E:81:A5:4B:10"}'
 
 Write to LED characteristic - "UUID": "00001815-0000-1000-8000-00805f9b34fb"
 mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0048", "value":"01"}'
-mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0048", "value":"01"}'
 mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0048", "value":"01"}'
 mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char0034", "value":"01"}'
+mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service002e/char0034", "value":"01"}'
 
 Read temperature characteristic - "UUID": "00002a6e-0000-1000-8000-00805f9b34fb"
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
-mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service001f/char0022"}'
 
 Notifications
 Enable button notifications "UUID": "00002a56-0000-1000-8000-00805f9b34fb"
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":1}'
-mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":1}'
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":1}'
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":1}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service002e/char002f", "command":1}'
 
 Disable
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service0042/char0043", "command":0}'
-mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service0042/char0043", "command":0}'
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service0042/char0043", "command":0}'
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":0}'
+mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service002e/char002f", "command":0}'
 
 Subscribe to outbound messages
 mosquitto_sub -h localhost -t "test/gateway/out/#"
