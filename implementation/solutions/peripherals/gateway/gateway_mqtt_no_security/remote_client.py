@@ -1,4 +1,10 @@
 #!/usr/bin/python
+"""
+Asynchronous remote client for testing MQTT / BLE gateway
+Sends Read Characteristic commands to remote sensors and waits for responses
+
+Note: BLE devices need to be connected using gateway commands or bluetoothctl
+"""
 
 import sys
 import json
@@ -18,6 +24,7 @@ try:
 except IndexError:
     host = "localhost"
 
+# Dictionary of command strings to read characteristics from BLE sensors
 sensors = {'temperature_sensors': [
             '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}',
             '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}',
@@ -37,14 +44,16 @@ sensors = {'temperature_sensors': [
 
 
 def send_command():
+    """Send each command as an MQTT message to BLE gateway"""
     while True:
         for sensor, commands in sensors.items():
             for command in commands:
                 publish.single("test/gateway/in/read_characteristic", command, hostname=host)
-        sleep(5)
+        sleep(10)
 
 
 def print_msg(client, userdata, msg):
+    """Callback to print received messages from BLE gateway"""
     payload = json.loads(msg.payload)
     try:
         value = payload['value']
@@ -54,17 +63,18 @@ def print_msg(client, userdata, msg):
                 if handle in command:
                     if sensor == 'temperature_sensors':
                         value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Temperature: {value}\u2103\n")
+                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Temperature: {value}\u2103\n")
+                        print(f"{msg.topic}, {payload['bdaddr']}, Temperature: {value}\u2103")
                         break
                     if sensor == 'pressure_sensors':
-                        print(handle)
                         value = bluetooth_utils.scale_hex_big_endian(value, 1000)
-                        print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Pressure: {value:.1f} mBar\n")
+                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Pressure: {value:.1f} mBar\n")
+                        print(f"{msg.topic}, {payload['bdaddr']}, Pressure: {value:.1f} mBar")
                         break
                     if sensor == 'humidity_sensors':
-                        print(handle)
                         value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Humidity: {value}%\n")
+                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Humidity: {value}%\n")
+                        print(f"{msg.topic}, {payload['bdaddr']}, Humidity: {value}%")
                         break
     except KeyError:
         print("Sensor reading error: ", msg.topic, msg.payload.decode('utf-8'), "\n")
@@ -74,5 +84,5 @@ if __name__ == '__main__':
     thread = Thread(target=send_command)
     thread.start()
 
-    print("Waiting...")
+    print("Starting callback...\n")
     subscribe.callback(print_msg, "test/gateway/out/#", hostname=host)
