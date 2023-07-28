@@ -35,12 +35,10 @@ def send_command():
         for sensor, commands in sensors.items():
             for command in commands:
                 publish.single("test/gateway/in/read_characteristic", command, hostname=host)
-        break
         sleep(5)
 
 
 def print_msg(client, userdata, msg):
-    print("Callback waiting...")
     payload = json.loads(msg.payload)
     value = payload['value']
     handle = payload['handle']
@@ -49,23 +47,23 @@ def print_msg(client, userdata, msg):
             if handle in command:
                 if sensor == 'temperature_sensors':
                     value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Temperature: {value}\u2103")
+                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Temperature: {value}\u2103\n")
                     break
                 if sensor == 'pressure_sensors':
                     print(handle)
                     value = bluetooth_utils.scale_hex_big_endian(value, 1000)
-                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Pressure: {value:.1f} mBar")
+                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Pressure: {value:.1f} mBar\n")
                     break
                 if sensor == 'humidity_sensors':
                     print(handle)
                     value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Humidity: {value}%")
+                    print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Humidity: {value}%\n")
                     break
 
 
 if __name__ == '__main__':
-    print("Starting Main thread...")
     thread = Thread(target=send_command)
     thread.start()
 
+    print("Waiting...")
     subscribe.callback(print_msg, "test/gateway/out/#", hostname="localhost")
