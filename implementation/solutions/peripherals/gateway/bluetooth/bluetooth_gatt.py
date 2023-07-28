@@ -32,6 +32,8 @@ manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, 
 
 def get_owning_uuids(bdaddr, descriptor_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not device_proxy.ServicesResolved:
@@ -51,6 +53,8 @@ def get_owning_uuids(bdaddr, descriptor_path):
 
 def get_service_uuid(bdaddr, service_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not device_proxy.ServicesResolved:
@@ -64,6 +68,8 @@ def get_service_uuid(bdaddr, service_path):
 
 def get_characteristic_uuid(bdaddr, characteristic_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not device_proxy.ServicesResolved:
@@ -77,6 +83,8 @@ def get_characteristic_uuid(bdaddr, characteristic_path):
 
 def get_descriptor_uuid(bdaddr, descriptor_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not device_proxy.ServicesResolved:
@@ -90,6 +98,8 @@ def get_descriptor_uuid(bdaddr, descriptor_path):
 
 def get_owning_service_uuid(bdaddr, characteristic_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not device_proxy.ServicesResolved:
@@ -112,6 +122,8 @@ def waitForServiceDiscovery(properties_iface):
 def get_services(bdaddr):
     bus = dbus.SystemBus()
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -142,6 +154,8 @@ def get_services(bdaddr):
 def get_characteristics(bdaddr, service_path):
     bus = dbus.SystemBus()
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -168,6 +182,8 @@ def get_characteristics(bdaddr, service_path):
 def get_descriptors(bdaddr, characteristic_path):
     bus = dbus.SystemBus()
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -190,6 +206,8 @@ def get_descriptors(bdaddr, characteristic_path):
 
 def read_characteristic(bdaddr, characteristic_path):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -213,6 +231,8 @@ def read_characteristic(bdaddr, characteristic_path):
 
 def write_characteristic(bdaddr, characteristic_path, value):
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -271,6 +291,8 @@ def enable_notifications(bdaddr, characteristic_path, callback):
     global notifications_callback
     notifications_callback = callback
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
@@ -302,6 +324,8 @@ def enable_notifications(bdaddr, characteristic_path, callback):
 def disable_notifications(bdaddr, characteristic_path):
     bluetooth_utils.log("bluetooth_gatt.disable_notifications\n")
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    if not device_proxy:
+        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
     device_path = device_proxy.object_path
 
     if not bluetooth_general.is_connected(bus, device_path):
