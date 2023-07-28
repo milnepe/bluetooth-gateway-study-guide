@@ -19,10 +19,7 @@ from bluetooth import bluetooth_utils
 from bluetooth import bluetooth_constants
 
 
-try:
-    host = sys.argv[1]
-except IndexError:
-    host = "localhost"
+host = bluetooth_constants.BROKER
 
 # Dictionary of command strings to read characteristics from BLE sensors
 sensors = {'temperature_sensors': [
