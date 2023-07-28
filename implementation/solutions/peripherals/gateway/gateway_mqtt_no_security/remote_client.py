@@ -75,4 +75,4 @@ if __name__ == '__main__':
     thread.start()
 
     print("Waiting...")
-    subscribe.callback(print_msg, "test/gateway/out/#", hostname="localhost")
+    subscribe.callback(print_msg, "test/gateway/out/#", hostname=host)
