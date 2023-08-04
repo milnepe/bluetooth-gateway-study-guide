@@ -23,17 +23,17 @@ host = bluetooth_constants.BROKER
 
 # Dictionary of command strings to read characteristics from BLE sensors
 sensors = {'temperature_sensors': [
-            '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}',
+            '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0020"}',
             '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}',
             '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}',
             '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service001f/char0022"}'
           ],
           'pressure_sensors': [
-            '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char001e"}',
+            '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char001e"}',
             '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char001e"}'
           ],
           'humidity_sensors': [
-            '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0022"}',
+            '{"bdaddr":"90:FD:9F:7B:7E:E0", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7E_E0/service001b/char0022"}',
             '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0022"}',
             '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0024"}',
             '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service001f/char0024"}'
