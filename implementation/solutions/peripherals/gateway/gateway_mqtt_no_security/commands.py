@@ -81,4 +81,7 @@ class CmdNotifications(Command):
         if self.notifier is not None:
             #notifier = Notifier(bdaddr, handle, command)
             #self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
-            self.notifier.notifications()
+            #self.notifier.notifications()
+            thread = Thread(target=self.notifier.notifications)
+            thread.start()
+            thread.join()

@@ -168,11 +168,11 @@ class Notifier:
         if notifying is True:
             raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
         logging.info("Starting notifications...")
-        #start_notifications(characteristic_iface)
+        self.start_notifications(characteristic_iface)
 
-        thread = Thread(target=self.start_notifications, args=(characteristic_iface, ))
-        thread.daemon = True
-        thread.start()
+        # thread = Thread(target=self.start_notifications, args=(characteristic_iface, ))
+        # thread.daemon = True
+        # thread.start()
 
     def notification_received(self, path, value):
         """Notifications callback"""
