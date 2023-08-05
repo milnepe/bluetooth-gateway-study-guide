@@ -102,6 +102,8 @@ class BtController:
 
 @dataclass
 class Notifier:
+    """Notification class allowing each device to have its own event handler
+    [Todo: fix stop notifications]"""
     bdaddr: str
     handle: str
     command: str
@@ -116,9 +118,7 @@ class Notifier:
         if not value:
             return
         if self.notifications_callback:
-            #print(f"PATH: {path}") 
             self.notifications_callback(path, value)
-        # stdout.flush()
 
     def stop_handler(self):
         mainloop.quit()
@@ -138,11 +138,9 @@ class Notifier:
         self.notifications_callback = callback
         bus = dbus.SystemBus()
         device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
-        logging.info(f"Proxy: {device_proxy}")
         if not device_proxy:
             raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
         device_path = device_proxy.object_path
-        logging.info(f"Device path: {device_path}")
 
         if not bluetooth_general.is_connected(bus, device_path):
             raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
@@ -151,28 +149,19 @@ class Notifier:
             raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_SERVICES_NOT_RESOLVED)
 
         characteristic_object = bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, characteristic_path)
-        logging.info(f"CH_OBJECT: {characteristic_object}")
         characteristic_iface = dbus.Interface(characteristic_object, bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE)
-        logging.info(f"CH_INTERFACE: {characteristic_iface}")
         properties_iface = dbus.Interface(characteristic_object, bluetooth_constants.DBUS_PROPERTIES)
-        logging.info(f"PROP_IFACE: {properties_iface}")
         characteristic_properties = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Flags")
-        logging.info(f"CHAR_PROPS: {characteristic_properties}")
+
         if 'notify' not in characteristic_properties and 'indicate' not in characteristic_properties:
             raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
 
         # Returns dbus.Boolean!
         notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
         notifying = bool(notifying)
-        logging.info(f"NOTIFYING: {notifying=}")
         if notifying is True:
             raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
-        logging.info("Starting notifications...")
         self.start_notifications(characteristic_iface)
-
-        # thread = Thread(target=self.start_notifications, args=(characteristic_iface, ))
-        # thread.daemon = True
-        # thread.start()
 
     def notification_received(self, path, value):
         """Notifications callback"""
@@ -185,13 +174,9 @@ class Notifier:
         if bdaddr_from_path == self.bdaddr:
             logging.info(json.JSONEncoder().encode(result))
 
-
-    #def notifications(self, bdaddr: str, handle: str, command: str) -> None:
     def notifications(self) -> None:
         """Handle notifications"""
         result = {}
-
-
         if self.command == 0:
             try:
                 bluetooth_gatt.disable_notifications(bdaddr, handle)

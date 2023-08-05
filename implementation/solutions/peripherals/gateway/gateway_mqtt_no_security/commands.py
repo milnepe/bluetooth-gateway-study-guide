@@ -16,9 +16,9 @@ class CmdDiscoverDevices(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.discover_devices, args=(self.scantime,))  # args is a tuple - Don't forget the ','!
+            # args is a tuple - Don't forget the ','!
+            thread = Thread(target=self.bt_controller.discover_devices, args=(self.scantime,))
             thread.start()
-            # wait for the thread to finish
             thread.join()
 
 
@@ -79,9 +79,6 @@ class CmdNotifications(Command):
 
     def execute(self) -> None:
         if self.notifier is not None:
-            #notifier = Notifier(bdaddr, handle, command)
-            #self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
-            #self.notifier.notifications()
             thread = Thread(target=self.notifier.notifications)
             thread.start()
             thread.join()

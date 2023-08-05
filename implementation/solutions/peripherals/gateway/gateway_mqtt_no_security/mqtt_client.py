@@ -100,10 +100,12 @@ petes_str = 'Pete'
 bt_controller = BtController()
 invoker = Invoker()
 
+
 def mainloop_task():
     """Run mainloop"""
     mainloop = gi.repository.GLib.MainLoop()
     mainloop.run()
+
 
 def on_discover_devices(mosq, obj, msg):
     """Callback mapping TOPIC_ROOT + "/in/discover_devices" topic to CmdDiscoverDevices"""
@@ -143,7 +145,7 @@ def on_read_characteristic(mosq, obj, msg):
 def on_notifications(mosq, obj, msg):
     """Callback mapping TOPIC_ROOT + "/in/notifications" topic to CmdNotifications"""
     payload = json.loads(msg.payload)
-    invoker.set_command(CmdNotifications(Notifier( payload['bdaddr'], payload['handle'], payload['command'])))
+    invoker.set_command(CmdNotifications(Notifier(payload['bdaddr'], payload['handle'], payload['command'])))
     logging.info("Notifications: %s, %s", msg.topic, msg.payload.decode('utf-8'))
 
 
@@ -173,7 +175,6 @@ def main() -> None:
     thread = Thread(target=mainloop_task)
     thread.daemon = True
     thread.start()
-
 
     logging.info("Client listening...")
 
