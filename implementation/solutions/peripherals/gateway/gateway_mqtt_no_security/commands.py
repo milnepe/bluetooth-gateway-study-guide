@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from bt_controller import BtController
+from bt_controller import BtController, Notifier
 from threading import Thread
 
 
@@ -75,11 +75,10 @@ class CmdReadCharacteristic(Command):
 
 @dataclass
 class CmdNotifications(Command):
-    bt_controller: BtController
-    bdaddr: str
-    handle: str
-    command: int
+    notifier: Notifier
 
     def execute(self) -> None:
-        if self.bt_controller is not None:
-            self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
+        if self.notifier is not None:
+            #notifier = Notifier(bdaddr, handle, command)
+            #self.bt_controller.notifications(self.bdaddr, self.handle, self.command)
+            self.notifier.notifications()

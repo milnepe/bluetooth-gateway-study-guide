@@ -21,13 +21,13 @@ except ImportError:
     # import gobject as GObject
     print("gi.repository.GLib import not found")
 
-# mainloop = None
+mainloop = None
 notifications_callback = None
 
 # must set main loop before acquiring SystemBus object
-dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-bus = dbus.SystemBus()
-manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"), bluetooth_constants.DBUS_OM_IFACE)
+# dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+# bus = dbus.SystemBus()
+# manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"), bluetooth_constants.DBUS_OM_IFACE)
 
 
 def get_owning_uuids(bdaddr, descriptor_path):
@@ -255,70 +255,79 @@ def write_characteristic(bdaddr, characteristic_path, value):
     return bluetooth_constants.RESULT_OK
 
 
-def properties_changed(interface, changed, invalidated, path):
-    if interface != "org.bluez.GattCharacteristic1":
-        return
+# def properties_changed(interface, changed, invalidated, path):
+    # if interface != "org.bluez.GattCharacteristic1":
+        # return
 
-    value = []
-    value = changed.get('Value')
-    if not value:
-        return
-    if notifications_callback:
-        notifications_callback(path, value)
-    # stdout.flush()
-
-
-def stop_handler():
-    mainloop.quit()
+    # value = []
+    # value = changed.get('Value')
+    # if not value:
+        # return
+    # if notifications_callback:
+        # print(f"PATH: {path}") 
+        # notifications_callback(path, value)
+    # # stdout.flush()
 
 
-def start_notifications(characteristic_iface):
+# def stop_handler():
+    # mainloop.quit()
 
-    bus.add_signal_receiver(properties_changed, bus_name=bluetooth_constants.BLUEZ_SERVICE_NAME,
-                            dbus_interface=bluetooth_constants.DBUS_PROPERTIES,
-                            signal_name="PropertiesChanged",
-                            path_keyword="path")
+# def start_notifications(characteristic_iface):
+    # bus = dbus.SystemBus()
+    # bus.add_signal_receiver(properties_changed, bus_name=bluetooth_constants.BLUEZ_SERVICE_NAME,
+                            # dbus_interface=bluetooth_constants.DBUS_PROPERTIES,
+                            # signal_name="PropertiesChanged",
+                            # path_keyword="path")
 
-    bus.add_signal_receiver(stop_handler, "StopNotifications")
+    # bus.add_signal_receiver(stop_handler, "StopNotifications")
 
-    characteristic_iface.StartNotify()
-    # mainloop = GObject.MainLoop()
-    mainloop = gi.repository.GLib.MainLoop()
-    mainloop.run()
+    # characteristic_iface.StartNotify()
+    # # mainloop = GObject.MainLoop()
+    # # mainloop = gi.repository.GLib.MainLoop()
+    # # mainloop.run()
 
 
-def enable_notifications(bdaddr, characteristic_path, callback):
-    global notifications_callback
-    notifications_callback = callback
-    device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
-    if not device_proxy:
-        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
-    device_path = device_proxy.object_path
+# def enable_notifications(bdaddr, characteristic_path, callback):
+    # global notifications_callback
 
-    if not bluetooth_general.is_connected(bus, device_path):
-        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
+    # notifications_callback = callback
+    # bus = dbus.SystemBus()
+    # device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+    # logging.info(f"Proxy: {device_proxy}")
+    # if not device_proxy:
+        # raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
+    # device_path = device_proxy.object_path
+    # logging.info(f"Device path: {device_path}")
 
-    if not device_proxy.ServicesResolved:
-        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_SERVICES_NOT_RESOLVED)
+    # if not bluetooth_general.is_connected(bus, device_path):
+        # raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
 
-    characteristic_object = bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, characteristic_path)
-    characteristic_iface = dbus.Interface(characteristic_object, bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE)
-    properties_iface = dbus.Interface(characteristic_object, bluetooth_constants.DBUS_PROPERTIES)
+    # if not device_proxy.ServicesResolved:
+        # raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_SERVICES_NOT_RESOLVED)
 
-    characteristic_properties = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Flags")
+    # characteristic_object = bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, characteristic_path)
+    # logging.info(f"CH_OBJECT: {characteristic_object}")
+    # characteristic_iface = dbus.Interface(characteristic_object, bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE)
+    # logging.info(f"CH_INTERFACE: {characteristic_iface}")
+    # properties_iface = dbus.Interface(characteristic_object, bluetooth_constants.DBUS_PROPERTIES)
+    # logging.info(f"PROP_IFACE: {properties_iface}")
+    # characteristic_properties = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Flags")
+    # logging.info(f"CHAR_PROPS: {characteristic_properties}")
+    # if 'notify' not in characteristic_properties and 'indicate' not in characteristic_properties:
+        # raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
 
-    if 'notify' not in characteristic_properties and 'indicate' not in characteristic_properties:
-        raise bluetooth_exceptions.UnsupportedError(bluetooth_constants.RESULT_ERR_NOT_SUPPORTED)
+    # # Returns dbus.Boolean!
+    # notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
+    # notifying = bool(notifying)
+    # logging.info(f"NOTIFYING: {notifying=}")
+    # if notifying is True:
+        # raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
+    # logging.info("Starting notifications...")
+    # start_notifications(characteristic_iface)
 
-    # Returns dbus.Boolean!
-    notifying = properties_iface.Get(bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying")
-    notifying = bool(notifying)
-    if notifying is True:
-        raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
-
-    thread = Thread(target=start_notifications, args=(characteristic_iface, ))
-    thread.daemon = True
-    thread.start()
+    # # thread = Thread(target=start_notifications, args=(characteristic_iface, ))
+    # # thread.daemon = True
+    # # thread.start()
 
 
 def disable_notifications(bdaddr, characteristic_path):
