@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 MQTT / BLE gateway client supports remote commands:
 Device discovery, device connection, reading & writing characteristic and notifications
@@ -95,7 +95,6 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 bus = dbus.SystemBus()
 manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"), bluetooth_constants.DBUS_OM_IFACE)
-petes_str = 'Pete'
 
 bt_controller = BtController()
 invoker = Invoker()
