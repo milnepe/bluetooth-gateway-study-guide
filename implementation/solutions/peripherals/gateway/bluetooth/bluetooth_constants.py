@@ -24,5 +24,5 @@ RESULT_EXCEPTION = 7
 RESULT_ERR_BAD_ARGS = 8
 RESULT_ERR_NOT_FOUND = 9
 
-BROKER = "rock-4se"
+BROKER = "localhost"
 TOPIC_ROOT = "test/gateway"
