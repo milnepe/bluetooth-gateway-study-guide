@@ -1,11 +1,11 @@
-#!/usr/bin/python
+"""Constants"""
 
 ADAPTER_NAME = "hci0"
 
 BLUEZ_SERVICE_NAME = "org.bluez"
 BLUEZ_NAMESPACE = "/org/bluez/"
 DBUS_PROPERTIES = "org.freedesktop.DBus.Properties"
-DBUS_OM_IFACE = 'org.freedesktop.DBus.ObjectManager'
+DBUS_OM_IFACE = "org.freedesktop.DBus.ObjectManager"
 
 ADAPTER_INTERFACE = BLUEZ_SERVICE_NAME + ".Adapter1"
 DEVICE_INTERFACE = BLUEZ_SERVICE_NAME + ".Device1"
