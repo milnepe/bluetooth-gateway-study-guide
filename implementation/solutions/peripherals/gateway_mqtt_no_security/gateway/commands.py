@@ -1,7 +1,8 @@
-import logging
+"""Command classes"""
+
+from threading import Thread
 from dataclasses import dataclass
 from bt_controller import BtController, Notifier
-from threading import Thread
 
 
 class Command:
@@ -17,7 +18,9 @@ class CmdDiscoverDevices(Command):
     def execute(self) -> None:
         if self.bt_controller is not None:
             # args is a tuple - Don't forget the ','!
-            thread = Thread(target=self.bt_controller.discover_devices, args=(self.scantime,))
+            thread = Thread(
+                target=self.bt_controller.discover_devices, args=(self.scantime,)
+            )
             thread.start()
             thread.join()
 
@@ -29,7 +32,9 @@ class CmdConnectDevice(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.connect_device, args=(self.bdaddr,))
+            thread = Thread(
+                target=self.bt_controller.connect_device, args=(self.bdaddr,)
+            )
             thread.start()
             thread.join()
 
@@ -43,7 +48,10 @@ class CmdWriteCharacteristic(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.write_characteristic, args=(self.bdaddr, self.handle, self.value))
+            thread = Thread(
+                target=self.bt_controller.write_characteristic,
+                args=(self.bdaddr, self.handle, self.value),
+            )
             thread.start()
             thread.join()
 
@@ -55,7 +63,9 @@ class CmdDiscoverServices(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.discover_services, args=(self.bdaddr,))
+            thread = Thread(
+                target=self.bt_controller.discover_services, args=(self.bdaddr,)
+            )
             thread.start()
             thread.join()
 
@@ -68,7 +78,10 @@ class CmdReadCharacteristic(Command):
 
     def execute(self) -> None:
         if self.bt_controller is not None:
-            thread = Thread(target=self.bt_controller.read_characteristic, args=(self.bdaddr, self.handle))
+            thread = Thread(
+                target=self.bt_controller.read_characteristic,
+                args=(self.bdaddr, self.handle),
+            )
             thread.start()
             thread.join()
 
