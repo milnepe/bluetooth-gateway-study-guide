@@ -41,6 +41,13 @@ sensors = {
     ],
 }
 
+parser = argparse.ArgumentParser()
+parser.add_argument("hostname")  # broker
+parser.add_argument("topic_root")  # mqtt topic root
+
+args = parser.parse_args()
+hostname = args.hostname
+topic_root = args.topic_root
 
 def send_command(host, topic_root):
     """Send each command as an MQTT message to BLE gateway"""
@@ -83,19 +90,13 @@ def print_msg(client, userdata, msg):
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("hostname")  # broker
-    parser.add_argument("topic_root")  # mqtt topic root
-
-    args = parser.parse_args()
-
     # Send commands in a separate thread
-    thread = Thread(target=send_command, args=(args.hostname, args.topic_root))
+    thread = Thread(target=send_command, args=(hostname, topic_root))
     thread.start()
 
     print("Starting callback...\n")
     # Subscribe to all outging messges on gateway
-    subscribe.callback(print_msg, f"{args.topic_root}/out/#", hostname=args.hostname)
+    subscribe.callback(print_msg, f"{topic_root}/out/#", hostname=hostname)
 
 
 if __name__ == "__main__":
