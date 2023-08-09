@@ -1,13 +1,12 @@
-#!/usr/bin/python
-from bluetooth import bluetooth_constants
-from bluetooth import bluetooth_general
-from bluetooth import bluetooth_exceptions
-from bluetooth import bluetooth_utils
-import sys
-import logging
+"""Bluetooth LE GAP protocol"""
+
 import dbus
 import dbus.mainloop.glib
-from dbus import ByteArray
+
+from bluetooth_api import bluetooth_constants
+from bluetooth_api import bluetooth_general
+from bluetooth_api import bluetooth_utils
+
 
 try:
     from gi.repository import GObject
@@ -22,6 +21,7 @@ devices = {}
 
 
 def interfaces_added(path, interfaces):
+    """Add interfaces"""
     if bluetooth_constants.DEVICE_INTERFACE not in interfaces:
         return
     properties = interfaces[bluetooth_constants.DEVICE_INTERFACE]
@@ -34,6 +34,7 @@ def interfaces_added(path, interfaces):
 
 
 def properties_changed(interface, changed, invalidated, path):
+    """Properties changed"""
     if interface != bluetooth_constants.DEVICE_INTERFACE:
         return
     if path in devices:
@@ -50,6 +51,7 @@ def properties_changed(interface, changed, invalidated, path):
 
 
 def discovery_timeout():
+    """Discovery timeout"""
     global adapter_interface
     global mainloop
     global timer_id
@@ -63,6 +65,7 @@ def discovery_timeout():
 
 
 def discover_devices(timeout):
+    """Discover devices"""
     global adapter_interface
     global mainloop
     global timer_id
@@ -139,6 +142,7 @@ def discover_devices(timeout):
 
 
 def connect(bdaddr):
+    """Connect device"""
     bus = dbus.SystemBus()
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
     if device_proxy is None:
@@ -155,6 +159,7 @@ def connect(bdaddr):
 
 
 def disconnect(bdaddr):
+    """Disconnect device"""
     bus = dbus.SystemBus()
     device_proxy = bluetooth_general. getDeviceProxy(bus, bdaddr)
     device_path = device_proxy.object_path
