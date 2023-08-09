@@ -1,16 +1,15 @@
-#!/usr/bin/python
+"""Bluetooth LE GATT"""
 
-from bluetooth import bluetooth_utils
-from bluetooth import bluetooth_general
-from bluetooth import bluetooth_exceptions
-from bluetooth import bluetooth_constants
-import dbus
-import dbus.mainloop.glib
-from dbus import ByteArray
-from sys import stdin, stdout
 import time
 import codecs
-from operator import itemgetter, attrgetter
+import dbus
+import dbus.mainloop.glib
+
+from bluetooth_api import bluetooth_utils
+from bluetooth_api import bluetooth_general
+from bluetooth_api import bluetooth_exceptions
+from bluetooth_api import bluetooth_constants
+
 
 
 def get_owning_uuids(bdaddr, descriptor_path):
