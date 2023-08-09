@@ -1,10 +1,11 @@
-#!/usr/bin/python
-from bluetooth import bluetooth_constants
-import sys
-import dbus
+"""Bluetooth LE API helpers"""
 
-adapter_interface = None
-mainloop = None
+import dbus
+from bluetooth_api import bluetooth_constants
+
+
+# adapter_interface = None
+# mainloop = None
 
 # To do: Fix missing manager!
 # def get_adapters():
@@ -22,19 +23,31 @@ mainloop = None
 
 
 def getDeviceProxy(bus, bdaddr):
-    manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"), bluetooth_constants.DBUS_OM_IFACE)
+    """Get device proxy"""
+    manager = dbus.Interface(
+        bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"),
+        bluetooth_constants.DBUS_OM_IFACE,
+    )
     objects = manager.GetManagedObjects()
     for path, ifaces in objects.items():
         device = ifaces.get(bluetooth_constants.DEVICE_INTERFACE)
         if device is None:
             continue
         else:
-            if device['Address'] == bdaddr:
-                device_object = bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, path)
-                return dbus.Interface(device_object, bluetooth_constants.DEVICE_INTERFACE)
+            if device["Address"] == bdaddr:
+                device_object = bus.get_object(
+                    bluetooth_constants.BLUEZ_SERVICE_NAME, path
+                )
+                return dbus.Interface(
+                    device_object, bluetooth_constants.DEVICE_INTERFACE
+                )
 
 
 def is_connected(bus, device_path):
-    props = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, device_path), bluetooth_constants.DBUS_PROPERTIES)
+    """Connection check"""
+    props = dbus.Interface(
+        bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, device_path),
+        bluetooth_constants.DBUS_PROPERTIES,
+    )
     connected = props.Get(bluetooth_constants.DEVICE_INTERFACE, "Connected")
     return connected
