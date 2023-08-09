@@ -1,5 +1,6 @@
 """Bluetooth LE GATT"""
 
+import logging
 import time
 import codecs
 import dbus
@@ -245,7 +246,7 @@ def write_characteristic(bdaddr, characteristic_path, value):
 
 
 def disable_notifications(bdaddr, characteristic_path):
-    bluetooth_utils.log("bluetooth_gatt.disable_notifications\n")
+    logging.info("bluetooth_gatt.disable_notifications")
     device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
     if not device_proxy:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_NOT_CONNECTED)
@@ -271,5 +272,5 @@ def disable_notifications(bdaddr, characteristic_path):
     if notifying is False:
         raise bluetooth_exceptions.StateError(bluetooth_constants.RESULT_ERR_WRONG_STATE)
 
-    bluetooth_utils.log("calling StopNotify\n")
+    logging.info("calling StopNotify")
     characteristic_iface.StopNotify()

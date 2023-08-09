@@ -1,25 +1,27 @@
-#!/usr/bin/python
+"""Bluetooth LE API utils"""
+
 import dbus
-import sys
-from sys import stdin, stdout
-
-fo = open("log.txt", "a")
 
 
-def log(line):
-    fo.write(line)
-    fo.flush()
+# fo = open("log.txt", "a")
+
+
+# def log(line):
+#     fo.write(line)
+#     fo.flush()
 
 
 def byteArrayToHexString(bytes):
+    """Convert byteArray to HEX string"""
     hex_string = ""
     for byte in bytes:
-        hex_byte = '%02X' % byte
+        hex_byte = "%02X" % byte
         hex_string = hex_string + hex_byte
     return hex_string
 
 
 def dbus_to_python(data):
+    """Convert dbus types to equivalent python types"""
     if isinstance(data, dbus.String):
         data = str(data)
     if isinstance(data, dbus.ObjectPath):
@@ -49,10 +51,12 @@ def dbus_to_python(data):
 
 
 def big_to_little(b_endian: str) -> str:
+    """Convert big-endian to little-endian HEX values"""
     l_endian = bytearray.fromhex(b_endian)
     l_endian.reverse()
-    return ''.join(format(x, '02x') for x in l_endian)
+    return "".join(format(x, "02x") for x in l_endian)
 
 
 def scale_hex_big_endian(value: str, scalar: int) -> int:
+    """Scale big-endian HEX value"""
     return int(big_to_little(value), 16) / scalar
