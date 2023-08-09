@@ -3,14 +3,6 @@
 import dbus
 
 
-# fo = open("log.txt", "a")
-
-
-# def log(line):
-#     fo.write(line)
-#     fo.flush()
-
-
 def byteArrayToHexString(bytes):
     """Convert byteArray to HEX string"""
     hex_string = ""
