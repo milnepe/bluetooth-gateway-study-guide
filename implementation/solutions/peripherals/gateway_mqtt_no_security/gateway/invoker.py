@@ -1,3 +1,5 @@
+"""Command invoker"""
+
 from queue import Queue
 from commands import Command
 
