@@ -36,13 +36,14 @@ sensors = {
         '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0022"}',
         '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0024"}',
         '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service001f/char0024"}',
-    ],
+    ]
 }
 
 
 def send_command():
     """Send each command as an MQTT message to BLE gateway"""
     while True:
+        print(sensors.items())
         for sensor, commands in sensors.items():
             for command in commands:
                 publish.single(
