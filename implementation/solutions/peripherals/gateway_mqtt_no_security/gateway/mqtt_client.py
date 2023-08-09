@@ -77,6 +77,14 @@ except ImportError:
     # import gobject as GObject
     print("gi.repository.GLib import not found")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("hostname")  # broker
+parser.add_argument("topic_root")  # mqtt topic root
+
+args = parser.parse_args()
+hostname = args.hostname
+topic_root = args.topic_root
+
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
 # must set main loop before acquiring SystemBus object
@@ -87,7 +95,7 @@ manager = dbus.Interface(
     bluetooth_constants.DBUS_OM_IFACE,
 )
 
-bt_controller = BtController(hostname="localhost", topic_root="test/gateway")
+bt_controller = BtController(hostname, topic_root)
 invoker = Invoker()
 
 
@@ -98,21 +106,21 @@ def mainloop_task():
 
 
 def on_discover_devices(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/discover_devices" topic to CmdDiscoverDevices"""
+    """Callback mapping "topic_root/in/discover_devices" topic to CmdDiscoverDevices"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdDiscoverDevices(bt_controller, payload["scantime"]))
     logging.info("Discover devices: %s, %s", msg.topic, msg.payload.decode("utf-8"))
 
 
 def on_connect_device(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/connect_device" topic to CmdConnectDevice"""
+    """Callback mapping "topic_root/in/connect_device" topic to CmdConnectDevice"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdConnectDevice(bt_controller, payload["bdaddr"]))
     logging.info("Connect device: %s, %s", msg.topic, msg.payload.decode("utf-8"))
 
 
 def on_write_characteristic(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/write_characteristic" topic to CmdWriteCharacteristic"""
+    """Callback mapping "topic_root/in/write_characteristic" topic to CmdWriteCharacteristic"""
     payload = json.loads(msg.payload)
     invoker.set_command(
         CmdWriteCharacteristic(
@@ -123,14 +131,14 @@ def on_write_characteristic(mosq, obj, msg):
 
 
 def on_discover_services(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/discover_services" topic to CmdDiscoverServices"""
+    """Callback mapping "topic_root/in/discover_services" topic to CmdDiscoverServices"""
     payload = json.loads(msg.payload)
     invoker.set_command(CmdDiscoverServices(bt_controller, payload["bdaddr"]))
     logging.info("Discover Services: %s, %s", msg.topic, msg.payload.decode("utf-8"))
 
 
 def on_read_characteristic(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/read_characteristic" topic to CmdReadCharacteristic"""
+    """Callback mapping "topic_root/in/read_characteristic" topic to CmdReadCharacteristic"""
     payload = json.loads(msg.payload)
     invoker.set_command(
         CmdReadCharacteristic(bt_controller, payload["bdaddr"], payload["handle"])
@@ -139,7 +147,7 @@ def on_read_characteristic(mosq, obj, msg):
 
 
 def on_notifications(mosq, obj, msg):
-    """Callback mapping TOPIC_ROOT + "/in/notifications" topic to CmdNotifications"""
+    """Callback mapping "topic_root/in/notifications" topic to CmdNotifications"""
     payload = json.loads(msg.payload)
     invoker.set_command(
         CmdNotifications(
@@ -150,18 +158,12 @@ def on_notifications(mosq, obj, msg):
 
 
 def on_message(mosq, obj, msg):
-    """Callback mapping all other TOPIC_ROOT messages - no ops"""
+    """Callback mapping all other topic_root messages - no ops"""
     logging.info("Unexpected message: %s, %s", msg.topic, msg.payload.decode("utf-8"))
 
 
 def main() -> None:
     """Run client"""
-    parser = argparse.ArgumentParser()
-    parser.add_argument("hostname")  # broker
-    parser.add_argument("topic_root")  # mqtt topic root
-
-    args = parser.parse_args()
-    topic_root = args.topic_root
 
     mqttc = mqtt.Client()
 
