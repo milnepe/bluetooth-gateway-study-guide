@@ -5,7 +5,8 @@ import sys
 import json
 from dataclasses import dataclass
 import dbus
-import paho.mqtt.publish as publish
+import dbus.mainloop.glib
+from paho.mqtt import publish
 
 sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_gap
@@ -15,9 +16,17 @@ from bluetooth_api import bluetooth_utils
 from bluetooth_api import bluetooth_constants
 from bluetooth_api import bluetooth_general
 
+try:
+    import gi.repository.GLib
+except ImportError:
+    # import gobject as GObject
+    print("gi.repository.GLib import not found")
+
+
 @dataclass
 class BtController:
     """Bluetooth LE Controller"""
+
     hostname: str
     topic_root: str
 
@@ -137,8 +146,9 @@ class Notifier:
             return
         if self.notifications_callback:
             self.notifications_callback(path, value)
-
-    def stop_handler(self):
+    @staticmethod
+    def stop_handler():
+        mainloop = gi.repository.GLib.MainLoop()
         mainloop.quit()
 
     def start_notifications(self, characteristic_iface):
@@ -152,7 +162,7 @@ class Notifier:
             path_keyword="path",
         )
 
-        bus.add_signal_receiver(self.stop_handler, "StopNotifications")
+        bus.add_signal_receiver(Notifier.stop_handler, "StopNotifications")
 
         characteristic_iface.StartNotify()
 
@@ -220,12 +230,63 @@ class Notifier:
         if bdaddr_from_path == self.bdaddr:
             logging.info(json.JSONEncoder().encode(result))
 
+    def disable_notifications(self, bdaddr, characteristic_path):
+        """Disable characteristic notifications"""
+        logging.info("disable_notifications")
+        bus = dbus.SystemBus()
+        device_proxy = bluetooth_general.getDeviceProxy(bus, bdaddr)
+        device_path = device_proxy.object_path
+
+        if not bluetooth_general.is_connected(bus, device_path):
+            raise bluetooth_exceptions.StateError(
+                bluetooth_constants.RESULT_ERR_NOT_CONNECTED
+            )
+
+        if not device_proxy.ServicesResolved:
+            raise bluetooth_exceptions.StateError(
+                bluetooth_constants.RESULT_ERR_SERVICES_NOT_RESOLVED
+            )
+
+        characteristic_object = bus.get_object(
+            bluetooth_constants.BLUEZ_SERVICE_NAME, characteristic_path
+        )
+        characteristic_iface = dbus.Interface(
+            characteristic_object, bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE
+        )
+        properties_iface = dbus.Interface(
+            characteristic_object, bluetooth_constants.DBUS_PROPERTIES
+        )
+
+        characteristic_properties = properties_iface.Get(
+            bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Flags"
+        )
+
+        if (
+            "notify" not in characteristic_properties
+            and "indicate" not in characteristic_properties
+        ):
+            raise bluetooth_exceptions.UnsupportedError(
+                bluetooth_constants.RESULT_ERR_NOT_SUPPORTED
+            )
+
+        notifying = properties_iface.Get(
+            bluetooth_constants.GATT_CHARACTERISTIC_INTERFACE, "Notifying"
+        )
+        notifying = bool(notifying)
+        if notifying is False:
+            raise bluetooth_exceptions.StateError(
+                bluetooth_constants.RESULT_ERR_WRONG_STATE
+            )
+
+        logging.info("calling StopNotify")
+        characteristic_iface.StopNotify()
+
     def notifications(self) -> None:
         """Handle notifications"""
         result = {}
         if self.command == 0:
             try:
-                bluetooth_gatt.disable_notifications(bdaddr, handle)
+                self.disable_notifications(self.bdaddr, self.handle)
                 result["result"] = bluetooth_constants.RESULT_OK
             except bluetooth_exceptions.StateError as error:
                 result["result"] = error.args[0]
