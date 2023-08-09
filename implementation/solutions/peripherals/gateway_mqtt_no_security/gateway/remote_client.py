@@ -20,7 +20,6 @@ from paho.mqtt import publish
 
 sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_utils
-from bluetooth_api import bluetooth_constants
 
 # Dictionary of command strings to read characteristics from BLE sensors
 sensors = {
@@ -65,21 +64,18 @@ def print_msg(client, userdata, msg):
                 if handle in command:
                     if sensor == "temperature_sensors":
                         value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Temperature: {value}\u2103\n")
                         print(
                             f"{msg.topic}, {payload['bdaddr']}, Temperature: {value}\u2103"
                         )
                         break
                     if sensor == "pressure_sensors":
                         value = bluetooth_utils.scale_hex_big_endian(value, 1000)
-                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Pressure: {value:.1f} mBar\n")
                         print(
                             f"{msg.topic}, {payload['bdaddr']}, Pressure: {value:.1f} mBar"
                         )
                         break
                     if sensor == "humidity_sensors":
                         value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        # print(f"{msg.topic}, {msg.payload.decode('utf-8')}, Humidity: {value}%\n")
                         print(f"{msg.topic}, {payload['bdaddr']}, Humidity: {value}%")
                         break
     except KeyError:
@@ -93,11 +89,12 @@ def main():
 
     args = parser.parse_args()
 
+    # Send commands in a separate thread
     thread = Thread(target=send_command, args=(args.hostname, args.topic_root))
     thread.start()
 
     print("Starting callback...\n")
-    # Subscribe to all gateways outging messges
+    # Subscribe to all outging messges on gateway
     subscribe.callback(print_msg, f"{args.topic_root}/out/#", hostname=args.hostname)
 
 
