@@ -15,18 +15,20 @@ from bluetooth_api import bluetooth_utils
 from bluetooth_api import bluetooth_constants
 from bluetooth_api import bluetooth_general
 
-
+@dataclass
 class BtController:
     """Bluetooth LE Controller"""
+    hostname: str
+    topic_root: str
 
-    @staticmethod
-    def publisher(topic: str, result: dict):
+    def publisher(self, topic: str, result: dict):
         """Publishing helper"""
         json_result = json.JSONEncoder().encode(result)
+        # bluetooth_constants.TOPIC_ROOT + "/out/" + topic,
         publish.single(
-            bluetooth_constants.TOPIC_ROOT + "/out/" + topic,
+            f"{self.topic_root}/out/{topic}",
             json_result,
-            hostname=bluetooth_constants.BROKER,
+            hostname=self.hostname,
         )
 
     def discover_devices(self, scantime: str) -> None:
@@ -34,7 +36,7 @@ class BtController:
         devices_discovered = bluetooth_gap.discover_devices(int(scantime))
         json_devices_discovered = json.JSONEncoder().encode(devices_discovered)
         logging.info("Discover devices: %s", json_devices_discovered)
-        BtController.publisher("devices", json_devices_discovered)  # Publish result
+        self.publisher("devices", json_devices_discovered)  # Publish result
 
     def connect_device(self, bdaddr: str) -> None:
         """Connect device using address"""
@@ -44,7 +46,7 @@ class BtController:
         result["bdaddr"] = bdaddr
         result["cmd"] = "connect_device"
         logging.info(json.JSONEncoder().encode(result))
-        BtController.publisher("connection", result)  # Publish result
+        self.publisher("connection", result)  # Publish result
 
     def write_characteristic(self, bdaddr: str, handle: str, value: str) -> None:
         """Write a value to the characteristic using device address"""
@@ -59,7 +61,7 @@ class BtController:
         except bluetooth_exceptions.StateError as error:
             result["result"] = error.args[0]
         logging.info(json.JSONEncoder().encode(result))
-        BtController.publisher("sensor", result)  # Publish result
+        self.publisher("sensor", result)  # Publish result
 
     def discover_services(self, bdaddr: str) -> None:
         """Discover services using device address"""
@@ -96,7 +98,7 @@ class BtController:
         except bluetooth_exceptions.StateError as error:
             result["result"] = error.args[0]
         logging.info(json.JSONEncoder().encode(result))
-        BtController.publisher("services", result)  # Publish result
+        self.publisher("services", result)  # Publish result
 
     def read_characteristic(self, bdaddr: str, handle: str):
         """Read a characteristic using device address and handle"""
@@ -111,7 +113,7 @@ class BtController:
         except bluetooth_exceptions.StateError as error:
             result["result"] = error.args[0]
         logging.info(json.JSONEncoder().encode(result))
-        BtController.publisher("sensor", result)
+        self.publisher("sensor", result)
 
 
 @dataclass

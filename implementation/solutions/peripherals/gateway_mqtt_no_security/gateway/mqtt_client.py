@@ -53,6 +53,7 @@ mosquitto_sub -h localhost -t "test/gateway/out/#"
 import logging
 import json
 import sys
+import argparse
 from threading import Thread
 import dbus
 import dbus.mainloop.glib
@@ -71,7 +72,6 @@ from bt_controller import BtController, Notifier
 from invoker import Invoker
 
 try:
-    # from gi.repository import GObject
     import gi.repository.GLib
 except ImportError:
     # import gobject as GObject
@@ -87,7 +87,7 @@ manager = dbus.Interface(
     bluetooth_constants.DBUS_OM_IFACE,
 )
 
-bt_controller = BtController()
+bt_controller = BtController(hostname="localhost", topic_root="test/gateway")
 invoker = Invoker()
 
 
@@ -156,33 +156,33 @@ def on_message(mosq, obj, msg):
 
 def main() -> None:
     """Run client"""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("hostname")  # broker
+    parser.add_argument("topic_root")  # mqtt topic root
+
+    args = parser.parse_args()
+    topic_root = args.topic_root
 
     mqttc = mqtt.Client()
 
+    mqttc.message_callback_add(f"{topic_root}/in/discover_devices", on_discover_devices)
+    mqttc.message_callback_add(f"{topic_root}/in/connect_device", on_connect_device)
     mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/discover_devices", on_discover_devices
-    )
-    mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/connect_device", on_connect_device
-    )
-    mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/write_characteristic",
+        f"{topic_root}/in/write_characteristic",
         on_write_characteristic,
     )
     mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/discover_services", on_discover_services
+        f"{topic_root}/in/discover_services", on_discover_services
     )
     mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/read_characteristic",
+        f"{topic_root}/in/read_characteristic",
         on_read_characteristic,
     )
-    mqttc.message_callback_add(
-        bluetooth_constants.TOPIC_ROOT + "/in/notifications", on_notifications
-    )
+    mqttc.message_callback_add(f"{topic_root}/in/notifications", on_notifications)
 
     mqttc.on_message = on_message
-    mqttc.connect(bluetooth_constants.BROKER, 1883, 60)
-    mqttc.subscribe(bluetooth_constants.TOPIC_ROOT + "/in/#", 0)
+    mqttc.connect(args.hostname, 1883, 60)
+    mqttc.subscribe(f"{topic_root}/in/#", 0)
 
     mqttc.loop_start()
 
