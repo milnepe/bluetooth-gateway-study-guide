@@ -3,8 +3,10 @@
 MQTT / BLE gateway client supports remote commands:
 Device discovery, device connection, reading & writing characteristic and notifications
 
+Start the module with MQTT broker host and base topic parameters:
+python -m mqtt_client 'localhost' 'test/gateway'
 
-Example MQTT commands:
+Example MQTT commands - issue these in a separate terminal session (change the paths addresses and handles to match your BLE devices:
 
 Discover devices that are advertising:
 mosquitto_pub -h localhost -t "test/gateway/in/discover_devices" -m '{"scantime":"3000"}'
@@ -46,7 +48,7 @@ mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"90:
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service002e/char002f", "command":0}'
 mosquitto_pub -h localhost -t "test/gateway/in/notifications" -m '{"bdaddr":"58:8E:81:A5:4B:10", "handle":"/org/bluez/hci0/dev_58_8E_81_A5_4B_10/service002e/char002f", "command":0}'
 
-Subscribe to outbound messages
+Subscribe to outbound messages by running in a separate terminal:
 mosquitto_sub -h localhost -t "test/gateway/out/#"
 """
 
