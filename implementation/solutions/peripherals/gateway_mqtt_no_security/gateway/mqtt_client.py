@@ -89,13 +89,6 @@ topic_root = args.topic_root
 
 logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
 
-# must set main loop before acquiring SystemBus object
-dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-bus = dbus.SystemBus()
-manager = dbus.Interface(
-    bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"),
-    bluetooth_constants.DBUS_OM_IFACE,
-)
 
 bt_controller = BtController(hostname, topic_root)
 invoker = Invoker()
@@ -166,6 +159,14 @@ def on_message(mosq, obj, msg):
 
 def main() -> None:
     """Run client"""
+
+    # must set main loop before acquiring SystemBus object
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    bus = dbus.SystemBus()
+    manager = dbus.Interface(
+        bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"),
+        bluetooth_constants.DBUS_OM_IFACE,
+    )
 
     mqttc = mqtt.Client()
 
