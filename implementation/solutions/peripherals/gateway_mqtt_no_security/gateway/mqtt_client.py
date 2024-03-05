@@ -168,7 +168,8 @@ def main() -> None:
         bluetooth_constants.DBUS_OM_IFACE,
     )
 
-    mqttc = mqtt.Client()
+    # Paho-mqtt version 2.0 onwards
+    mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
     mqttc.message_callback_add(f"{topic_root}/in/discover_devices", on_discover_devices)
     mqttc.message_callback_add(f"{topic_root}/in/connect_device", on_connect_device)
