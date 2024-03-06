@@ -141,7 +141,8 @@ Open another Terminal:
 Make sure you have scanned and connected your peripheral using Bluetoothctl
 Issue mqtt command to get temperature according to characteristic handle for your device - the output shows in the other terminal:
 
-```mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b"}'
+```
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b"}'
 ```
 
 Result:
