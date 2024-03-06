@@ -5,7 +5,7 @@ A web BLE gateway based on an embedded HTTP server (Apache2) and WS (Websocketd)
 
 Tested with ROCK-3C and Silicon Labs Thunderboard Sense (SLTB001A) & Thunderboard EFR32BG22 (SLTB010A)
 
-##OS Installation.
+#OS Installation.
 
 Get latest Debian XFCE image - CLI not working - tested with rock-3c_debian_bullseye_xfce_b42.img.xz
 
@@ -21,7 +21,7 @@ Reboot
 sudo reboot
 
 **************************************************
-##Software.
+#Software.
 
 Install Paho-mqtt in venv:
 ```sudo apt install python3-dev pkg-config cmake python3-venv
@@ -67,7 +67,7 @@ pip install paho-mqtt
 ```
 
 ******************************************
-##Using Bluetoothctl to connect and identify characteristic path.
+#Using Bluetoothctl to connect and identify characteristic path.
 
 Open a separate Terminal and start Bluettotctl:
 ```bluetoothctl
@@ -130,7 +130,7 @@ Descriptor (Handle 0x0000)
 ```
 
 ******************************************************
-##Testing.
+#Testing.
 
 Start mqtt_client in venv:
 ```cd gateway
