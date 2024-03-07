@@ -1,12 +1,28 @@
 """Bluetooth LE API utils"""
 
 import dbus
+import struct
 
 
-def byteArrayToHexString(bytes):
-    """Convert byteArray to HEX string"""
+def byteListToInt(byte_list: list, byteorder='little') -> int:
+    """Convert 2 or 4 byte list to integer"""
+    binary_data = bytearray(byte_list)
+    if byteorder == 'little':
+        if len(byte_list) == 4:
+            return struct.unpack('<i', binary_data)[0]
+        if len(byte_list) == 2:
+            return struct.unpack('<h', binary_data)[0]
+    if byteorder == 'big':
+        if len(byte_list) == 4:
+            return struct.unpack('>i', binary_data)[0]
+        if len(byte_list) == 2:
+            return struct.unpack('>h', binary_data)[0]
+
+
+def byteArrayToHexString(binary_data: bytearray) -> str:
+    """Convert 4 bytes to hex string"""
     hex_string = ""
-    for byte in bytes:
+    for byte in binary_data:
         hex_byte = "%02X" % byte
         hex_string = hex_string + hex_byte
     return hex_string
