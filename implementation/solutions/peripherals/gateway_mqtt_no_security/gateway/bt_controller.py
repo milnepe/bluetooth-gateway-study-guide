@@ -117,7 +117,9 @@ class BtController:
         result["cmd"] = "read_characteristic"
         try:
             value = bluetooth_gatt.read_characteristic(bdaddr, handle)
-            result["value"] = bluetooth_utils.byteArrayToHexString(value)
+            # BLE returns 8 or 16 bit values as a list of integers in little endian byte order.
+            # We convert them to integer values as Telegraf can't do this - they just need scaling
+            result["value"] = bluetooth_utils.byteListToInt(value)
             result["result"] = 0
         except bluetooth_exceptions.StateError as error:
             result["result"] = error.args[0]
@@ -146,6 +148,7 @@ class Notifier:
             return
         if self.notifications_callback:
             self.notifications_callback(path, value)
+
     @staticmethod
     def stop_handler():
         mainloop = gi.repository.GLib.MainLoop()
@@ -226,7 +229,9 @@ class Notifier:
         result["bdaddr"] = self.bdaddr
         result["handle"] = path
         result["cmd"] = "notification_received"
-        result["value"] = bluetooth_utils.byteArrayToHexString(value)
+        # BLE returns 8 or 16 bit values as a list of integers in little endian byte order.
+        # We convert them to integer values as Telegraf can't do this - they just need scaling
+        result["value"] = bluetooth_utils.byteListToInt(value)
         if bdaddr_from_path == self.bdaddr:
             logging.info(json.JSONEncoder().encode(result))
 
