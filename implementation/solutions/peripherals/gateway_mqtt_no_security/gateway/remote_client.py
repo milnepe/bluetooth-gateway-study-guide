@@ -49,6 +49,7 @@ args = parser.parse_args()
 hostname = args.hostname
 topic_root = args.topic_root
 
+
 def send_command(host, topic_root):
     """Send each command as an MQTT message to BLE gateway"""
     while True:
@@ -70,20 +71,13 @@ def print_msg(client, userdata, msg):
             for command in commands:
                 if handle in command:
                     if sensor == "temperature_sensors":
-                        value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        print(
-                            f"{msg.topic}, {payload['bdaddr']}, Temperature: {value}\u2103"
-                        )
+                        print(f"{msg.topic}, {payload['bdaddr']}, Temperature: {value / 100}\u2103")
                         break
                     if sensor == "pressure_sensors":
-                        value = bluetooth_utils.scale_hex_big_endian(value, 1000)
-                        print(
-                            f"{msg.topic}, {payload['bdaddr']}, Pressure: {value:.1f} mBar"
-                        )
+                        print(f"{msg.topic}, {payload['bdaddr']}, Pressure: {(value / 1000):.1f} mBar")
                         break
                     if sensor == "humidity_sensors":
-                        value = bluetooth_utils.scale_hex_big_endian(value, 100)
-                        print(f"{msg.topic}, {payload['bdaddr']}, Humidity: {value}%")
+                        print(f"{msg.topic}, {payload['bdaddr']}, Humidity: {value / 100}%")
                         break
     except KeyError:
         print("Sensor reading error: ", msg.topic, msg.payload.decode("utf-8"), "\n")
