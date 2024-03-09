@@ -5,18 +5,22 @@ import struct
 
 
 def byteListToInt(byte_list: list, byteorder='little') -> int:
-    """Convert 2 or 4 byte list to integer"""
+    """Convert 1, 2 or 4 byte list to signed integer"""
     binary_data = bytearray(byte_list)
     if byteorder == 'little':
         if len(byte_list) == 4:
             return struct.unpack('<i', binary_data)[0]
         if len(byte_list) == 2:
             return struct.unpack('<h', binary_data)[0]
+        if len(byte_list) == 1:
+            return struct.unpack('<b', binary_data)[0]
     if byteorder == 'big':
         if len(byte_list) == 4:
             return struct.unpack('>i', binary_data)[0]
         if len(byte_list) == 2:
             return struct.unpack('>h', binary_data)[0]
+        if len(byte_list) == 1:
+            return struct.unpack('<b', binary_data)[0]
 
 
 def byteArrayToHexString(binary_data: bytearray) -> str:

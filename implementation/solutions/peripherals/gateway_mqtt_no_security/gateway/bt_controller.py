@@ -117,9 +117,10 @@ class BtController:
         result["cmd"] = "read_characteristic"
         try:
             value = bluetooth_gatt.read_characteristic(bdaddr, handle)
-            # BLE returns 8 or 16 bit values as a list of integers in little endian byte order.
-            # We convert them to integer values as Telegraf can't do this - they just need scaling
-            result["value"] = bluetooth_utils.byteListToInt(value)
+            print(value)
+            # Converts 8, 16 or 32 bit values in little endian byte order to signed integers
+            # as Telegraf can't do this - they just need scaling
+            result["value"] = bluetooth_utils.byteListToInt(value, byteorder='little')
             result["result"] = 0
         except bluetooth_exceptions.StateError as error:
             result["result"] = error.args[0]
@@ -229,9 +230,9 @@ class Notifier:
         result["bdaddr"] = self.bdaddr
         result["handle"] = path
         result["cmd"] = "notification_received"
-        # BLE returns 8 or 16 bit values as a list of integers in little endian byte order.
-        # We convert them to integer values as Telegraf can't do this - they just need scaling
-        result["value"] = bluetooth_utils.byteListToInt(value)
+        # Converts 8, 16 or 32 bit values in little endian byte order to signed integers
+        # as Telegraf can't do this - they just need scaling
+        result["value"] = bluetooth_utils.byteListToInt(value, byteorder='little')
         if bdaddr_from_path == self.bdaddr:
             logging.info(json.JSONEncoder().encode(result))
 
