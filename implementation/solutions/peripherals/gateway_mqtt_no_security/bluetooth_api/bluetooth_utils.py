@@ -20,7 +20,7 @@ def byteListToInt(byte_list: list, byteorder='little') -> int:
         if len(byte_list) == 2:
             return struct.unpack('>h', binary_data)[0]
         if len(byte_list) == 1:
-            return struct.unpack('<b', binary_data)[0]
+            return struct.unpack('>b', binary_data)[0]
 
 
 def byteArrayToHexString(binary_data: bytearray) -> str:
