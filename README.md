@@ -146,11 +146,11 @@ mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr
 ```
 
 Result:
-```2024-03-06 11:51:15,249 - Read Characteristic: test/gateway/in/read_characteristic, {"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b"}
-2024-03-06 11:51:15,357 - {"bdaddr": "9A:61:DA:87:D2:C4", "handle": "/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b", "cmd": "read_characteristic", "value": "48080000", "result": 0}
+```[72, 8, 0, 0]
+2024-03-10 12:37:53,163 - {"bdaddr": "9A:61:DA:87:D2:C4", "handle": "/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b", "cmd": "read_characteristic", "value": 2120, "result": 0}
 ```
 
 
 Convert result:
-48080000 -> 0848 = 2120 = 21.20 C
+2120 = 21.20 C
 
