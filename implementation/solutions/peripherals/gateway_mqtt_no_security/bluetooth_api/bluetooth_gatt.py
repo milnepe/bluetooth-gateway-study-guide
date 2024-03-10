@@ -11,6 +11,17 @@ from bluetooth_api import bluetooth_general
 from bluetooth_api import bluetooth_exceptions
 from bluetooth_api import bluetooth_constants
 
+from operator import itemgetter, attrgetter
+
+try:
+    from gi.repository import GObject
+except ImportError:
+    import gobject as GObject
+
+# must set main loop before acquiring SystemBus object
+dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+bus = dbus.SystemBus()
+manager = dbus.Interface(bus.get_object(bluetooth_constants.BLUEZ_SERVICE_NAME, "/"), bluetooth_constants.DBUS_OM_IFACE)
 
 
 def get_owning_uuids(bdaddr, descriptor_path):

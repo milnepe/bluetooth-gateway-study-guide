@@ -18,6 +18,7 @@ mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"84
 mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"58:8E:81:A5:4B:10"}'  # 06 Thunderboard #19216
 
 Discover services
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"9A:61:DA:87:D2:C4"}'  #  Arduino Nano BLE 33 Sense
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
