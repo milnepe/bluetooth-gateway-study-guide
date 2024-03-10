@@ -5,7 +5,8 @@ import struct
 
 
 def byteListToInt(byte_list: list, byteorder='little') -> int:
-    """Convert 1, 2 or 4 byte list to signed integer"""
+    """Convert 1, 2 or 4 byte list to signed integer
+    https://docs.python.org/3/library/struct.html"""
     binary_data = bytearray(byte_list)
     if byteorder == 'little':
         if len(byte_list) == 4:
