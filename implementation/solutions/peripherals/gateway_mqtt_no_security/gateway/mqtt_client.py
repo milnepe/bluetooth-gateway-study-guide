@@ -13,6 +13,7 @@ mosquitto_pub -h localhost -t "test/gateway/in/discover_devices" -m '{"scantime"
 
 Connect to device using its address:
 mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"9A:61:DA:87:D2:C4"}'  # Arduino Nano 33 BLE Sense
+mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"29:CF:BC:38:C0:56"}'  # Arduino Nano 33 BLE Sense
 mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'  # 02 Thunder Sense #46565
 mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'  # 04 Thunder Sense #32540
 mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'  # 05 Thunderboard #51376
@@ -20,6 +21,7 @@ mosquitto_pub -h localhost -t "test/gateway/in/connect_device" -m '{"bdaddr":"58
 
 Discover services
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"9A:61:DA:87:D2:C4"}'
+mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"29:CF:BC:38:C0:56"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:19:B5:E5"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"90:FD:9F:7B:7F:1C"}'
 mosquitto_pub -h localhost -t "test/gateway/in/discover_services" -m '{"bdaddr":"84:2E:14:31:C8:B0"}'
@@ -33,6 +35,7 @@ mosquitto_pub -h localhost -t "test/gateway/in/write_characteristic" -m '{"bdadd
 
 Read temperature characteristic - "UUID": "00002a6e-0000-1000-8000-00805f9b34fb"
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b"}'
+mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"29:CF:BC:38:C0:56", "handle":"/org/bluez/hci0/dev_29_CF_BC_38_C0_56/service000a/char000b"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:19:B5:E5", "handle":"/org/bluez/hci0/dev_90_FD_9F_19_B5_E5/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"90:FD:9F:7B:7F:1C", "handle":"/org/bluez/hci0/dev_90_FD_9F_7B_7F_1C/service001b/char0020"}'
 mosquitto_pub -h localhost -t "test/gateway/in/read_characteristic" -m '{"bdaddr":"84:2E:14:31:C8:B0", "handle":"/org/bluez/hci0/dev_84_2E_14_31_C8_B0/service001f/char0022"}'

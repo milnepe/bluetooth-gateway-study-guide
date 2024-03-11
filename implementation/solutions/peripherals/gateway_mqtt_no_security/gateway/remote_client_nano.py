@@ -27,9 +27,11 @@ from bluetooth_api import bluetooth_utils
 sensors = {
     "temperature_sensors": [
         '{"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000b"}',
+        '{"bdaddr":"29:CF:BC:38:C0:56", "handle":"/org/bluez/hci0/dev_29_CF_BC_38_C0_56/service000a/char000b"}',
     ],
     "humidity_sensors": [
         '{"bdaddr":"9A:61:DA:87:D2:C4", "handle":"/org/bluez/hci0/dev_9A_61_DA_87_D2_C4/service000a/char000e"}',
+        '{"bdaddr":"29:CF:BC:38:C0:56", "handle":"/org/bluez/hci0/dev_29_CF_BC_38_C0_56/service000a/char000e"}',
     ],
 }
 
