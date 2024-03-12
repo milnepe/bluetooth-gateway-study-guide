@@ -9,7 +9,7 @@ Note:   BLE devices need to be connected using gateway commands or bluetoothctl
         Sensors dictionary needs populating with your sensor values
 
 usage:
-python -m remote_client_nano "localhost" "test/gateway"
+/home/rock/gateway_mqtt_no_security/venv/bin/python /home/rock/gateway_mqtt_no_security/gateway/remote_client_nano.py "localhost" "test/gateway"
 """
 
 import sys
@@ -20,7 +20,7 @@ from time import sleep
 from paho.mqtt import subscribe
 from paho.mqtt import publish
 
-sys.path.insert(0, "..")  # Aid location of bluetooth package
+#sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_utils
 
 # Dictionary of command strings to read characteristics from BLE sensors

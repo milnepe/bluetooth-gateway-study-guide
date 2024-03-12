@@ -2,8 +2,7 @@
 
 from threading import Thread
 from dataclasses import dataclass
-from bt_controller import BtController, Notifier
-
+from controller import bt_controller
 
 class Command:
     def execute(self):
@@ -12,7 +11,7 @@ class Command:
 
 @dataclass
 class CmdDiscoverDevices(Command):
-    bt_controller: BtController
+    bt_controller: bt_controller.BtController
     scantime: str
 
     def execute(self) -> None:
@@ -27,7 +26,7 @@ class CmdDiscoverDevices(Command):
 
 @dataclass
 class CmdConnectDevice(Command):
-    bt_controller: BtController
+    bt_controller: bt_controller.BtController
     bdaddr: str
 
     def execute(self) -> None:
@@ -41,7 +40,7 @@ class CmdConnectDevice(Command):
 
 @dataclass
 class CmdWriteCharacteristic(Command):
-    bt_controller: BtController
+    bt_controller: bt_controller.BtController
     bdaddr: str
     handle: str
     value: str
@@ -58,7 +57,7 @@ class CmdWriteCharacteristic(Command):
 
 @dataclass
 class CmdDiscoverServices(Command):
-    bt_controller: BtController
+    bt_controller: bt_controller.BtController
     bdaddr: str
 
     def execute(self) -> None:
@@ -72,7 +71,7 @@ class CmdDiscoverServices(Command):
 
 @dataclass
 class CmdReadCharacteristic(Command):
-    bt_controller: BtController
+    bt_controller: bt_controller.BtController
     bdaddr: str
     handle: str
 
@@ -88,7 +87,7 @@ class CmdReadCharacteristic(Command):
 
 @dataclass
 class CmdNotifications(Command):
-    notifier: Notifier
+    notifier: bt_controller.Notifier
 
     def execute(self) -> None:
         if self.notifier is not None:

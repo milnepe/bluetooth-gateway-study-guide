@@ -4,7 +4,7 @@ MQTT / BLE gateway client supports remote commands:
 Device discovery, device connection, reading & writing characteristic and notifications
 
 Start the module with MQTT broker host and base topic parameters:
-python -m mqtt_client 'localhost' 'test/gateway'
+/home/rock/gateway_mqtt_no_security/venv/bin/python /home/rock/gateway_mqtt_no_security/gateway/mqtt_client.py 'localhost' 'test/gateway'
 
 Example MQTT commands - issue these in a separate terminal session (change the paths addresses and handles to match your BLE devices:
 
@@ -67,17 +67,17 @@ import dbus
 import dbus.mainloop.glib
 import paho.mqtt.client as mqtt
 
-sys.path.insert(0, "..")  # Aid location of bluetooth package
+#sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_constants
 
-from commands import CmdDiscoverDevices
-from commands import CmdConnectDevice
-from commands import CmdWriteCharacteristic
-from commands import CmdDiscoverServices
-from commands import CmdReadCharacteristic
-from commands import CmdNotifications
-from bt_controller import BtController, Notifier
-from invoker import Invoker
+from controller.commands import CmdDiscoverDevices
+from controller.commands import CmdConnectDevice
+from controller.commands import CmdWriteCharacteristic
+from controller.commands import CmdDiscoverServices
+from controller.commands import CmdReadCharacteristic
+from controller.commands import CmdNotifications
+from controller.bt_controller import BtController, Notifier
+from controller.invoker import Invoker
 
 try:
     import gi.repository.GLib
