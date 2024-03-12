@@ -1,0 +1,12 @@
+[Unit]
+Description = "BLE gateway service"
+After=network.target
+
+[Service]
+User = rock
+WorkingDirectory=/home/rock/gateway_mqtt_no_security
+ExecStart=/home/rock/gateway_mqtt_no_security/venv/bin/python /home/rock/gateway_mqtt_no_security/gateway/mqtt_client.py 'localhost' 'test/gateway'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
