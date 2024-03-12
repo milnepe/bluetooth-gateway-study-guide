@@ -20,7 +20,7 @@ from time import sleep
 from paho.mqtt import subscribe
 from paho.mqtt import publish
 
-#sys.path.insert(0, "..")  # Aid location of bluetooth package
+# sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_utils
 
 # Dictionary of command strings to read characteristics from BLE sensors

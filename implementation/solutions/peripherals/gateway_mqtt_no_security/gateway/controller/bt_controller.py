@@ -8,7 +8,7 @@ import dbus
 import dbus.mainloop.glib
 from paho.mqtt import publish
 
-#sys.path.insert(0, "..")  # Aid location of bluetooth package
+# sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_gap
 from bluetooth_api import bluetooth_gatt
 from bluetooth_api import bluetooth_exceptions

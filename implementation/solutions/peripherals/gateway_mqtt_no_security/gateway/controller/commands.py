@@ -4,6 +4,7 @@ from threading import Thread
 from dataclasses import dataclass
 from controller import bt_controller
 
+
 class Command:
     def execute(self):
         raise NotImplementedError

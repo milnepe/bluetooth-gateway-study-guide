@@ -134,7 +134,7 @@ Descriptor (Handle 0x0000)
 
 Start mqtt_client in venv:
 ```cd gateway
-python -m mqtt_client 'localhost' 'test/gateway'
+/home/rock/gateway_mqtt_no_security/venv/bin/python /home/rock/gateway_mqtt_no_security/gateway/mqtt_client.py 'localhost' 'test/gateway'
 ```
 
 Open another Terminal:

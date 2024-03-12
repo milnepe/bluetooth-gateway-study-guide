@@ -67,7 +67,7 @@ import dbus
 import dbus.mainloop.glib
 import paho.mqtt.client as mqtt
 
-#sys.path.insert(0, "..")  # Aid location of bluetooth package
+# sys.path.insert(0, "..")  # Aid location of bluetooth package
 from bluetooth_api import bluetooth_constants
 
 from controller.commands import CmdDiscoverDevices

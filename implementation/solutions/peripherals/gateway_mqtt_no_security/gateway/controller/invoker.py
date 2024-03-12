@@ -3,6 +3,7 @@
 from queue import Queue
 from controller import commands
 
+
 class Invoker:
     def __init__(self):
         self.cmd_queue = Queue()
